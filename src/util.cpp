@@ -140,9 +140,9 @@ void UTIL_AccessLogPrint( string strIP, string strUser, string strRequest, int i
 			// timezone has the wrong sign, change it
 
 			if( timezone > 0 )
-				fprintf( gpAccessLog, "[%s -%02d%02d] ", pTime, abs( timezone / 3600 ) % 60, abs( timezone / 60 ) % 60 );
+				fprintf( gpAccessLog, "[%s -%02d%02d] ", pTime, abs( (int) timezone / 3600 ) % 60, abs( (int) timezone / 60 ) % 60 );
 			else
-				fprintf( gpAccessLog, "[%s +%02d%02d] ", pTime, abs( timezone / 3600 ) % 60, abs( timezone / 60 ) % 60 );
+				fprintf( gpAccessLog, "[%s +%02d%02d] ", pTime, abs( (int) timezone / 3600 ) % 60, abs( (int) timezone / 60 ) % 60 );
 
 			fprintf( gpAccessLog, "\"%s\" %d %d\n", strRequest.c_str( ), iStatus, iBytes );
 
@@ -195,9 +195,9 @@ string UTIL_AddedToDate( string strAdded )
 	// timezone has the wrong sign, change it
 			
 	if( timezone > 0 )
-		strDate = (string)pTime + " -" + addzero( abs( timezone / 3600 ) % 60 ) + addzero( abs( timezone / 60 ) % 60 );
+		strDate = (string)pTime + " -" + addzero( abs( (int) timezone / 3600 ) % 60 ) + addzero( abs( (int) timezone / 60 ) % 60 );
 	else
-		strDate = (string)pTime + " +" + addzero( abs( timezone / 3600 ) % 60 ) + addzero( abs( timezone / 60 ) % 60 );
+		strDate = (string)pTime + " +" + addzero( abs( (int) timezone / 3600 ) % 60 ) + addzero( abs( (int) timezone / 60 ) % 60 );
 
 	return strDate;
 }
@@ -287,7 +287,7 @@ string UTIL_ElapsedTimeStr( struct bnbttv btvStart, struct bnbttv btvEnd )
 {
 	char szGen[8];
 	memset( szGen, 0, sizeof( char ) * 8 );
-	sprintf( szGen, "%0.3f", UTIL_ElapsedTime( btvStart, btvEnd ) / 1000.0 );
+	sprintf( szGen, "%0.3f", (double) UTIL_ElapsedTime( btvStart, btvEnd ) / 1000.0 );
 
 	return szGen;
 }
@@ -315,7 +315,7 @@ string UTIL_EscapedToString( const string &strEscape )
 
 				sscanf( pBuf, "%02X", &c );
 
-				strString += c;
+				strString += (char) c;
 
 				i += 3;
 			}
@@ -461,11 +461,11 @@ string UTIL_SecondsToString( unsigned long iSeconds )
 	// int iS = iSeconds % 60;
 
 	iSeconds /= 60;
-	int iM = iSeconds % 60;
+	int iM = (int) iSeconds % 60;
 	iSeconds /= 60;
-	int iH = iSeconds % 24;
+	int iH = (int) iSeconds % 24;
 	iSeconds /= 24;
-	int iD = iSeconds;
+	int iD = (int) iSeconds;
 
 	string strSeconds;
 
@@ -605,7 +605,7 @@ string UTIL_StringToHash( const string &strString )
 
 		sscanf( pBuf, "%02x", &c );
 
-		strHash += c;
+		strHash += (char) c;
 	}
 
 	return strHash;
@@ -789,7 +789,7 @@ unsigned long UTIL_SizeFile( const char *szFile )
 string UTIL_ToLower( string strUpper )
 {
 	for( unsigned long i = 0; i < strUpper.size( ); i++ )
-		strUpper[i] = tolower( strUpper[i] );
+		strUpper[i] = (char) tolower( strUpper[i] );
 
 	return strUpper;
 }
