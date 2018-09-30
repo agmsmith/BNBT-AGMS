@@ -25,12 +25,15 @@ body
  <li><strong>bnbt_allow_search (default 1):</strong> enable or disable searching of torrents on the index page.</li><br>
  <li><strong>bnbt_allow_sort (default 1):</strong> enable or disable sorting of torrents.</li><br>
  <li><strong>bnbt_allow_torrent_downloads (default 1):</strong> </li><br>
+ <li><strong>bnbt_announce_access_required (default 0):</strong> see users.txt.</li><br>
  <li><strong>bnbt_archive_dir (no default):</strong></li><br>
  <li><strong>bnbt_charset (default "iso-8859-1"):</strong> the charset to include with the Content-Type header.</li><br>
  <li><strong>bnbt_comment_length (default 800):</strong> the maximum length of comments.</li><br>
  <li><strong>bnbt_comments_file (no default):</strong> the file to store comments (this is a local path).</li><br>
  <li><strong>bnbt_compression_level (default 6):</strong> the compression level zlib will use to compress responses. Use 0 to disable compression, 1 for fastest (worst) compression, and 9 for slowest (best) compression.</li><br>
  <li><strong>bnbt_count_unique_peers (default 1):</strong> enable or disable counting of unique peers.</li><br>
+ <li><strong>bnbt_custom_announce (no default):</strong> optional custom announce string. <i>bnbt_custom_announce = /announce.php</i></li><br>
+ <li><strong>bnbt_custom_scrape (no default):</strong> optional custom announce string. <i>bnbt_custom_scrape = /scrape.php</i></li><br>
  <li><strong>bnbt_debug (default 0):</strong> enable or disable printing of debug messages.</li><br>
  <li><strong>bnbt_delete_invalid (default 0):</strong> enable or disable removal of invalid torrent files.</li><br>
  <li><strong>bnbt_delete_own_torrents (default 1):</strong> enable or disable access for users to remove their own torrents from the tracker (i.e. torrents they uploaded).</li><br>
@@ -54,6 +57,7 @@ body
  <li><strong>bnbt_refresh_static_interval (default 10):</strong> the number of minutes to wait between refreshing the static header and footer.</li><br>
  <li><strong>bnbt_refresh_fast_cache_interval (default 10):</strong> the number of seconds to wait <strong>at least</strong> between refreshing the index/scrape data. BNBT will only refresh the fast cache when the specified interval has elapsed AND an index/scrape request has been received.</li><br>
  <li><strong>bnbt_robots_txt (no default):</strong> the robots.txt file to be returned when /robots.txt is accessed (this is a local path).</li><br>
+ <li><strong>bnbt_scrape_access_required (default 0):</strong> see users.txt.</li><br>
  <li><strong>bnbt_show_added (default 1):</strong> enable or disable displaying of dates and times when each torrent was uploaded on the index page.</li><br>
  <li><strong>bnbt_show_average_dl_rate (default 0):</strong> enable or disable displaying of average peer download rates on the stats page.</li><br>
  <li><strong>bnbt_show_average_left (default 0):</strong> enable or disable displaying of average left percentages on the index page.</li><br>
@@ -75,14 +79,17 @@ body
  <li><strong>bnbt_static_footer (no default):</strong> the static footer file (this is a local path).</li><br>
  <li><strong>bnbt_static_header (no default):</strong> the static header file (this is a local path).</li><br>
  <li><strong>bnbt_style_sheet (no default):</strong> the style sheet (this is a URL).</li><br>
+ <li><strong>bnbt_tagX (no default):</strong>  for setting Category Tags, where X is a consecutive unique integer starting at 1, <i>bnbt_tag1 = Category Name|Focused Image URL|Unfocused Image URL</i></li><br>
  <li><strong>bnbt_tag_file (default "tags.bnbt"):</strong> the file to store tags, names, uploaders, and info links (this is a local path).</li><br>
  <li><strong>bnbt_upload_dir (no default):</strong> the directory to place torrents uploaded with the torrent uploader (often the same as allowed_dir).</li><br>
+ <li><strong>bnbt_use_mouseovers (default 0):</strong> enable or disable the JavaScripted MouseOver feature for the categories displayed on the index page.</li><br>
  <li><strong>bnbt_users_file (default "users.bnbt"):</strong> the file to store usernames, hashed passwords, access levels, and creation dates and times (this is a local path).</li><br>
  <li><strong>bnbt_users_per_page (default 50):</strong> the number of users to display per page on the users page.</li><br>
  <li><strong>dfile = (default "dstate.bnbt"):</strong> the file to store downloader and completes data (this is a local path).</li><br>
  <li><strong>downloader_timeout_interval (default 2700):</strong> the number of seconds to wait between expiring timed out peers (this should be greater than announce_interval).</li><br>
- <li><strong>image_bar_fill (no default):</strong></li><br>
- <li><strong>image_bar_trans (no default):</strong></li><br>
+ <li><strong>favicon (no default):</strong> the file to be used for servicing favicon requests (this is a local path).</li><br>
+ <li><strong>image_bar_fill (no default):</strong> the image file for the completed area of graphical indicators (this is a URL).</li><br>
+ <li><strong>image_bar_trans (no default):</strong> the image file for the incompleted area of graphical indicators (this is a URL).</li><br>
  <li><strong>keep_dead (default 0):</strong> enable or disable displaying of torrents with 0 seeders and 0 leechers on the index page.</li><br>
  <li><strong>max_give (default 200):</strong> the maximum number of peers to include with the announce response.</li><br>
  <li><strong>min_request_interval (default 18000):</strong> the number of seconds each client should wait between scrapes.</li><br>

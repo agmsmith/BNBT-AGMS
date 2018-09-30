@@ -1,0 +1,25 @@
+=============
+TRACKER LINKS
+=============
+
+	Tracker links are an advanced version of peer stealing. You can only link between BNBT trackers, so don't try this with any other trackers. Tracker links only share announce information, but the protocol could be extended in the future to allow sharing of user accounts or other information. To setup a tracker link, follow these steps,
+
+1.) Choose a primary tracker. Set the config keys,
+
+bnbt_tlink_server = 1
+bnbt_tlink_bind = <whatever you want, leave this blank to bind to all addresses>
+bnbt_tlink_password = <whatever you want, don't leave this blank>
+bnbt_tlink_port = <whatever you want, leave this blank to use port 5204>
+
+Start the tracker.
+
+2.) Choose a secondary tracker. Set the config keys,
+
+bnbt_tlink_server = 0
+bnbt_tlink_connect = <ip of primary tracker>
+bnbt_tlink_password = <password of primary tracker>
+bnbt_tlink_port = <port of primary tracker>
+
+Start the tracker. Repeat step two for each secondary tracker.
+
+	Your trackers will being sharing complete announce information, so it DOES NOT MATTER which tracker a peer connects to - that peer will receive the same information from any tracker in the network. This is a highly efficient way to load balance trackers (tens if not hundreds of times more efficient than stealers). However, announce information is handled as if it came directly from a peer, so if the trackers aren't tracking the same torrents, bandwidth will be wasted (announce information from unknown torrents will be ignored). It is useless to link trackers with completely disjoint or even nearly disjoint sets of torrents.
