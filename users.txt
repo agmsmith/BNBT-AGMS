@@ -1,0 +1,54 @@
+BNBT supports user logins and signups. There are several things you should know before using this feature.
+
+=======================
+CREATING THE FIRST USER
+=======================
+
+If your tracker does not have any users, it will offer full access to guests. This is NOT what you want your tracker to be doing; it only does this so someone (i.e. you) can create the first user. When you start your tracker for the first time, make sure nobody can access it except for yourself. Open your tracker in your favourite web browser, access the /users.html page, and create a new user WITH FULL ACCESS! Once your tracker has a user, it will only offer restricted access to guests, so make sure the new user has full access.
+
+If you screw up and need to start over, shutdown your tracker and delete the users.bnbt file. You can start again from there.
+
+=========================
+AUTHENTICATION & SECURITY
+=========================
+
+BNBT uses HTTP authentication, but currently it only supports 'Basic' authentication. This means your login and password will be sent as plain text over the network. A future version of BNBT should support 'Digest' authentication as well, which is somewhat more secure.
+
+BNBT will never store each user's actual password in the users file. Instead, it stores an MD5 hash of the "A1" value, which is simply a combination of the user's username, password, and the BNBT realm. This should allow BNBT to use 'Digest' authentication in the future. Note that if you change the BNBT realm (bnbt_realm), your users file will become invalid (i.e. nobody's passwords will work anymore).
+
+=============
+ACCESS LEVELS
+=============
+
+BNBT uses something called a bitfield to store access levels. You may have seen one of these before in some games (Quake 2 comes to mind, as does Admin Mod for Half-Life). It works like this,
+
+1 = view access (basic)
+2 = dl access (downloader)
+4 = comments access (poster)
+8 = upload access (uploader)
+16 = edit access (moderator)
+32 = admin access (admin)
+64 = signup access
+
+To come up with an access level, simply add up the values for the features you wish to offer. For example, if you want a user to be able to view the tracker, download files, and upload files, their access level would be,
+
+1 + 2 + 8 = 11
+
+You need to know how to set access levels because BNBT uses two config values to set the default access level for guests (users who are not logged in) and members (users who signed up through the signup page). Simply set bnbt_guest_access and bnbt_member_access to the access levels you wish each group to have. Since BNBT stores each user's access level seperately, if you change bnbt_member_access existing users will not be affected; only new users will receive the new access level.
+
+===============
+DISABLING USERS
+===============
+
+If you don't wish to support users on your tracker, you should follow these steps. It is impossible to completely remove users from your tracker unless you downgrade to a previous version (e.g. BNBT Beta 6.7) since all the admin features of BNBT rely on user authentication. However, you can make it look like your tracker doesn't support users.
+
+1.) set bnbt_guest_access = <access level you want everyone to have>
+2.) set bnbt_member_access = 0
+3.) configure your tracker to use a style sheet by setting bnbt_style_sheet = <url here>
+4.) make sure your style sheet contains the following text,
+
+p.login { display: none; }
+
+5.) start your tracker, go to /users.html, and create an admin account for yourself
+
+Make sure you remove all the extra links from your header.html file, and you should be set. If you want to access the admin features of the tracker, simply access /login.html and enter the login information for the user you created in step 5.

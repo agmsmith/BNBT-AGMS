@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>BNBT Documentation</title>
+<style type="text/css">
+body
+{
+	background: white;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+<h2><strong>2.1</strong> Installing & Running BNBT on Windows Systems</h2>
+<p>BNBT does not come with an installer. BNBT does not create, modify, or delete any registry keys, it does not copy files to your system folder, and it does not create any desktop or start menu shortcuts. To run BNBT, simply double click <em>BNBT.exe</em> or <em>BNBTMySQL.exe</em>. For example,</p>
+<img src="run_windows.png">
+<p>BNBT may report warnings on startup (such as those seen above). Almost all warnings can be ignored. If BNBT encounters a fatal error it will automatically shutdown.</p>
+<p>If you want to run BNBT in the background as an NT Service, open a command interpreter (click on the Start Menu, click on Run, and type <strong>cmd</strong> as shown below).</p>
+<img src="cmd.png">
+<p>Change to the BNBT folder and run BNBT with one of the following command line options,</p>
+<ul>
+<li><strong>bnbt -i</strong>: installs the BNBT service. You must do this before starting the BNBT service.</li>
+<li><strong>bnbt -start</strong>: starts the BNBT service.</li>
+<li><strong>bnbt -stop</strong>: stops the BNBT service.</li>
+<li><strong>bnbt -u</strong>: uninstalls the BNBT service.</li>
+</ul>
+<img src="service.png">
+</body>
+</html>

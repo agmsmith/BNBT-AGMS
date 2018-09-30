@@ -1,0 +1,30 @@
+<html>
+<head>
+<title>BNBT Documentation</title>
+<style type="text/css">
+body
+{
+	background: white;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+<h2><strong>1.1</strong> Compiling BNBT on Windows Systems</h2>
+<p>If you want to run BNBT 'as is' without making any changes to the source code, then you don't need to compile anything; precompiled binaries have been provided for you (<em>BNBT.exe</em> and <em>BNBTMySQL.exe</em>). If you want to make changes to the source code, you will need a compiler such as Microsoft Visual C++ .NET (recommended) or <a href="http://www.mingw.org/">MinGW</a> (which comes with <a href="http://www.bloodshed.net/devcpp.html">Dev-C++</a>, an excellent IDE). You will also need zlib 1.2.1 or newer and if you wish to compile a binary with MySQL support you will also need MySQL 4.0 or newer.</p>
+<p><b>Step 1 (install zlib):</b> To install zlib, simply download <a href="http://www.zlib.org/">zlib 1.2.1 or newer, <strong>compiled DLL distribution</strong></a> and extract it to any folder (for example, <em>C:\zlib</em> - I will call this <em>zlibdir</em>). You will add this folder to your compiler's search paths later.</p>
+<p><b>Step 2 (install MySQL):</b> You only need to install MySQL if you wish to compile a binary with MySQL support. To install MySQL, simply download <a href="http://www.mysql.org/">MySQL 4.0 or newer, <strong>Windows distribution</strong></a> and extract it to any folder (for example, <em>C:\MySQL</em> - I will call this <em>mysqldir</em>). You will add this folder to your compiler's search paths later.</p>
+<h2><strong>1.1.1</strong> Microsoft Visual C++ .NET</h2>
+<p>Microsoft Visual C++ .NET is the recommended compiler for BNBT (the precompiled binaries were compiled with Microsoft Visual C++ .NET). If you haven't already setup your search paths, you should do so now,</p>
+<p><b>Step 3 for MSVC++ .NET (setup include search paths):</b> Click on the 'Tools' menu and select the 'Options' item. Click on the 'Projects' folder and select the 'VC++ Directories' item. Choose 'Include files' from the dropdown menu and click the 'New Line' icon (it looks like a folder) or double click on the first empty line. Type <em>zlibdir\include</em> (where <em>zlibdir</em> is the folder referenced in step 1) and press enter. If you wish to compile a binary with MySQL support, add another line and type <em>mysqldir\include</em> (where <em>mysqldir</em> is the folder referenced in step 2) and press enter.</p>
+<img src="include_paths_windows.png">
+<p><b>Step 4 for MSVC++ .NET (setup library search paths):</b> Click on the 'Tools' menu and select the 'Options' item. Click on the 'Projects' folder and select the 'VC++ Directories' item. Choose 'Library files' from the dropdown menu and click the 'New Line' icon (it looks like a folder) or double click on the first empty line. Type <em>zlibdir\lib</em> (where <em>zlibdir</em> is the folder referenced in step 1) and press enter. If you wish to compile a binary with MySQL support, add another line and type <em>mysqldir\lib\opt</em> (where <em>mysqldir</em> is the folder referenced in step 2) and press enter.</p>
+<img src="library_paths_windows.png">
+<p><b>Step 5 for MSVC++ .NET (compile):</b> To compile BNBT, simply open the <em>BNBT.sln</em> solution file in the <em>bnbtdir\src</em> folder (where <em>bnbtdir</em> is the folder you extracted BNBT to). If you wish to compile a release binary, make sure the 'Release' target is selected as shown below. If you wish to compile a debug binary, make sure the 'Debug' target is selected. If you wish to compile a binary with MySQL support, select the desired MySQL target.</p>
+<img src="release.png">
+<p>Once you’ve selected a target, click on the 'Build Solution' button or click on the 'Build' menu and select the 'Build Solution' item. Microsoft Visual C++ .NET will compile a <em>BNBT.exe</em> or <em>BNBTMySQL.exe</em> binary in the <em>bnbtdir\src</em> folder.</p>
+<h2><strong>1.1.2</strong> Dev-C++</h2>
+<p>TODO</p>
+</body>
+</html>

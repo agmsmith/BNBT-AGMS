@@ -1,0 +1,26 @@
+<html>
+<head>
+<title>BNBT Documentation</title>
+<style type="text/css">
+body
+{
+	background: white;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+<h2><strong>1.2</strong> Compiling BNBT on Other Systems</h2>
+<p>BNBT should compile on Linux, Unix, OS X, BSD, Sun Solaris, and possibly other systems. You will need a compiler such as <a href="http://gcc.gnu.org/">GCC</a> (most systems should already have this) and a GNU compatible make such as <a href="http://www.gnu.org/software/make/">GNU Make</a> (most systems should already have this). You will also need zlib 1.2.1 or newer and if you wish to compile a binary with MySQL support you will also need MySQL 4.0 or newer. If you are compiling BNBT with an old version of GCC (older than version 3) you will also need STLport.</p>
+<p><b>Step 1 (install zlib):</b> If you already have zlib 1.2.1 or newer, skip this step. To install zlib, simply download <a href="http://www.zlib.org/">zlib 1.2.1 or newer, <strong>source distribution</strong></a> and extract it to any folder (for example, <em>~/zlib</em> - I will call this <em>zlibdir</em>).</p>
+<ul>
+ <li>If you have root access you should install zlib as a shared library for the system. Change to <em>zlibdir</em> and type <strong>./configure --shared --prefix=/usr</strong> then type <strong>make install</strong> (on BSD systems, type <strong>gmake install</strong>).</li><br>
+ <li>If you don't have root access you should install zlib as a static library for BNBT only. Change to <em>zlibdir</em> and type <strong>make</strong> (on BSD systems, type <strong>gmake</strong>) then copy <em>libz.a</em> to <em>bnbtdir/src</em> (where <em>bnbtdir</em> is the directory you extracted BNBT to).</li>
+</ul>
+<p><b>Step 2 (install MySQL):</b> If you already have MySQL 4.0 or newer, skip this step. You only need to install MySQL if you wish to compile a binary with MySQL support. To install MySQL, go to <a href="http://www.mysql.org/">http://www.mysql.org/</a> and follow the instructions. You don't need to install the source distribution (the binary distribution or the RPM distribution should work fine).</p>
+<p><b>Step 3 (Sun Solaris users only):</b> If you are running Sun Solaris and your system is little endian (e.g. Intel) you should remove the indicated lines near the top of bnbt.h and sha1.h.</p>
+<p><b>Step 4 (install STLport):</b> If you are compiling BNBT with GCC version 3 or newer (check with <strong>g++ --version</strong>), skip this step. To install STLport, go to <a href="http://www.stlport.org/">http://www.stlport.org/</a> and follow the instructions. <strong>TODO - MAKEFILE INSTRUCTIONS.</strong></p>
+<p><b>Step 5 (compile):</b> If you wish to compile a release binary, simply change to the <em>bnbtdir/src</em> directory and type <strong>make bnbt</strong> (on BSD systems, type <strong>gmake bnbt</strong>). If you wish to compile a release binary with MySQL support, simply change to the <em>bnbtdir/src</em> directory and type <strong>make bnbtmysql</strong> (on BSD systems, type <strong>gmake bnbtmysql</strong>). A <em>bnbt</em> or <em>bnbtmysql</em> binary will be compiled in the <em>bnbtdir/src</em> directory. If you wish to remove all files created during compilation, type <strong>make clean</strong> (on BSD systems, type <strong>gmake clean</strong>).</p>
+</body>
+</html>

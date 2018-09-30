@@ -1,0 +1,224 @@
+/* thanks to the amazing Trinity for this CSS */
+
+img {
+
+    vertical-align:            middle                ;
+
+}
+
+body {
+
+    color:                     black                 ;
+    background-color:          white                 ;
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+    font-weight:               normal                ;
+
+}
+
+p {
+
+    color:                     inherit               ;
+    font-family:               inherit               ;
+    font-size:                 inherit               ;
+    font-weight:               inherit               ;
+
+}
+
+h1 {
+
+    color:                     inherit               ;
+    font-family:               inherit               ;
+    font-size:                 20pt                  ;
+    font-weight:               normal                ;
+
+}
+
+h2 {
+
+    color:                     inherit               ;
+    font-family:               inherit               ;
+    font-size:                 15pt                  ;
+    font-weight:               normal                ;
+
+}
+
+h3 {
+
+    color:                     inherit               ;
+    font-family:               inherit               ;
+    font-size:                 15pt                  ;
+    font-weight:               normal                ;
+}
+
+h4 {
+
+    color:                     inherit               ;
+    font-family:               inherit               ;
+    font-size:                 15pt                  ;
+    font-weight:               normal                ;
+
+}
+
+a {
+
+    color:                     #3F419B               ;
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+    font-weight:               normal                ;
+    text-decoration:           none                  ;
+
+}
+
+a:hover {
+
+    color:                     #404040               ;
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+    font-weight:               normal                ;
+    text-decoration:           underline             ;
+
+}
+
+a.sort {
+
+    color:                     black                 ;
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+    font-weight:               normal                ;
+    text-transform:            lowercase             ;
+
+}
+
+a.sort:hover {
+
+    text-transform:            uppercase             ;
+    text-decoration:           none                  ;
+
+}
+
+table {
+
+    border-spacing:            2pt                   ;
+    empty-cells:               show                  ;
+
+}
+
+tr.even, tr.com_body {
+
+    background-color:          #DEE3E7               ;
+
+}
+
+tr.odd, tr.com_header {
+
+    background-color:          #EFEFEF               ;
+
+}
+
+code {
+
+    font-family:               inherit               ;
+
+}
+
+th {
+
+    color:                     black                 ;
+    background-color:          #C0C0C0               ;
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+    padding:                   5px 10px 5px 10px     ;
+    vertical-align:            top                   ;
+    text-transform:            none                  ;
+    border:                    1px solid black       ;
+
+}
+
+td {
+
+    color:                     black                 ;
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+    padding:                   5px 10px 5px 10px     ;
+
+}
+
+td.name, td.download, td.bytes, td.date, td.infolink, td.admin {
+
+    white-space:               nowrap                ;
+
+}
+
+td.download, td.percent, td.infolink, td.admin, td.ip {
+
+    text-align:                center                ;
+
+}
+
+td.bytes, td.connected {
+
+    text-align:                right                 ;
+
+}
+
+td.number, td.number_red, td.number_yellow, td.number_green {
+
+    text-align:                center                ;
+
+}
+
+td.number_red, td.number_yellow, td.number_green {
+
+    border:                    1px solid black       ;
+
+}
+
+td.number_red {
+
+    color:                     red                   ;
+
+}
+
+td.number_yellow {
+
+    color:                     #FFA24A               ;
+
+}
+
+td.number_green {
+
+    color:                     green                 ;
+
+}
+
+.pipe {
+
+    color:                     white                 ;
+
+}
+
+.username {
+
+    color:                     red                   ;
+
+}
+
+.clearfilter {
+
+    display:                   none                  ;
+
+}
+
+input, select, option {
+
+    font-family:               tahoma                ;
+    font-size:                 8pt                   ;
+
+}
+
+.gen_index {
+
+    text-align:                center                ;
+
+}

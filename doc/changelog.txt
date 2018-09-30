@@ -1,0 +1,496 @@
+Beta 8.1 Release 3
+ - fixed a major bug with compact announces
+
+Beta 8.1
+ - major optimizations (no more threads)
+  * tracker links were removed since they were threaded
+ - added 'fast cache' to speed up index/scrape generation at a cost of delayed stats
+  * added the "bnbt_refresh_fast_cache_interval" config value
+  * the tracker will cache index/scrape data for at most this many seconds
+ - slightly better error messages (thanks Olaf)
+ - fixed a bug where BNBT would report bad headers when none were sent
+ - minor optimizations (e.g. global recv buffer)
+ - minor MySQL query changes
+ - modified MySQL tables to use BLOB instead of BINARY CHAR
+ - removed XML dumping
+ - added RSS dumping (thanks labarks)
+  * added a ton of config values for RSS dumping
+ - changed /torrent.html linking to /torrents/<hash>.torrent
+ - no longer send compressed responses if size_of_compressed > size_of_raw
+ - fixed some compiler warnings and removed -w flag from Makefile
+
+Beta 8.0 Release 2
+ - fixed a serious crash bug with tracker links on secondary trackers
+ - fixed a bug where BNBT would constantly refresh the static header and footer (credit Elandal)
+ - fixed a query error with stats dumping when mysql_override_dstate was off
+ - mysql.h is now include as mysql/mysql.h on some systems
+ - and stdio.h is now included by default on all systems
+ - fixed a major bug where some internal databases would be needlessly copied and deleted
+ - added the "bnbt_max_recv_size" config value
+
+Beta 8.0
+ - supressed connection reset errors
+ - supressed deflate errors (on Z_OK)
+ - added MySQL support
+  * added the "mysql_host" config value
+  * added the "mysql_database" config value
+  * added the "mysql_user" config value
+  * added the "mysql_password" config value
+  * added the "mysql_port" config value
+  * added the "mysql_refresh_allowed_interval" config value
+  * added the "mysql_refresh_stats_interval" config value
+  * added the "mysql_override_dstate" config value
+  * added BNBTPHP (example PHP frontend)
+ - added the "bnbt_robots_txt" config value
+ - fixed a bug where deleted torrents would sometimes recover their tag data on restart
+ - externally linked torrents are now linked even more correctly
+ - various project file changes (e.g. dynamic linking on Windows)
+ - pruned the changelog
+
+Beta 7.7
+ - added the "bnbt_name_length" config value
+ - added the "bnbt_comment_length" config value
+ - added tracker links (from BNBT Beta 7.3)
+ - major optimizations
+  * converted vector loops to use iterators
+  * converted CAtomDicti to use STL maps
+ - info hashes as well as names now link to the stats page
+
+Beta 7.6
+ - upgraded base64 decoding library
+ - upgraded zlib to version 1.2.1
+  * zlib now handles gzip compression headers and footers
+  * changed the "bnbt_compression_level" config value to default to 6 instead of 5
+ - started converting some isXXX virtual functions to dynamic casts
+ - started converting some structures to STL maps
+ - added request_t client request structure
+ - added bCompressOK flag to response_t server response structure
+ - moved some request processing to the client thread
+ - some non fatal errors are now reported as warnings instead
+ - fixed a major bug with FreeBSD
+ - fixed a bug with the archive dir (credit MrMister)
+ - added support for the compact announce extension
+ - added the "bnbt_show_average_ul_rate" config value
+ - added the "bnbt_show_average_dl_rate" config value
+ - added support for displaying average peer rates
+ - misc HTML changes
+
+Beta 7.5
+ - removed the command console
+ - info link now defaults to a blank value instead of "http://"
+ - fixed a bug where moderators couldn't see the 'delete torrent' link
+ - added support for the min_request_interval scrape flag
+ - added support for the no_peer_id announce extension
+ - removed logging of "client timed out" messages
+ - fixed a MAJOR algorithm error with /announce (sorry Bram)
+ - fixed a bug when pthread_create fails
+
+Beta 7.4
+ - fixed a bug where usernames with non standard characters couldn't be edited or deleted
+ - fixed a bug where config entries without a value (i.e. "port =") would crash on startup
+ - ip addresses are now only displayed with comments posted by a guest
+ - added the "bnbt_max_peers_display" config value
+ - added the "bnbt_realm" config value
+ - moderators can now delete torrents
+ - added the 'downloaded' key to /scrape
+ - the 'Your Torrents' list now displays torrent names if possible
+ - added a 'DOWNLOAD TORRENT' link to the stats page
+ - removed logging to console (messages are logged to file only)
+ - added a basic command console
+ - extensive optimizations
+  * removed stealers due to conflicts with optimized code
+  * removed tracker links due to conflicts with optimized code
+
+Beta 7.3
+ - announce errors are now returned as 200 OK with a 'failure reason' key
+ - fixed a bug where some filter links weren't escaped correctly
+ - added the "bnbt_force_announce_on_download" config value
+ - added "name=" parameter to Content-Type on torrent download (should fix some torrent download problems)
+ - added a "Count Unique Peers" link to the admin panel
+ - added the "bnbt_tlink_server" config value
+ - added the "bnbt_tlink_connect" config value
+ - added the "bnbt_tlink_bind" config value
+ - added the "bnbt_tlink_password" config value
+ - added the "bnbt_tlink_port" config value
+ - added tracker links (read link.txt)
+ - changed the behaviour of the server to leave excess connections in the socket queue instead of closing
+ - added the "bnbt_allow_info_link" config value
+ - added an Info Link column
+ - added the "bnbt_archive_dir" config value
+ - compiling BNBT under Windows should be significantly faster (WIN32_LEAN_AND_MEAN)
+ - fixed a bug where the tracker wouldn't expire some peers
+
+Beta 7.2
+ - more optimizations (startup should be even faster)
+ - fixed a bug where max progress wouldn't be calculated if bnbt_show_min_left was 0
+ - fixed several potential crash situations when allowed_dir wasn't set
+ - fixed a bug where some stealer errors would leave dead sockets lying around
+ - externally linked torrents are now linked correctly (i.e. "%20" instead of "+")
+ - access logs are now saved as "YYYY-MM-DD.log" instead of "YYYY MM-DD.log"
+ - error logs are now saved in seperate files like access logs
+ - removed the "bnbt_error_log" config value
+ - added the "bnbt_error_log_dir" config value
+ - error logs are saved as "YYYY-MM-DDe.log" so both logs can be saved in the same dir
+ - added support for displaying page generation times on some pages
+ - added the "bnbt_show_gen_time" config value
+ - added searching and users per page to users.html
+ - added the "bnbt_users_per_page" config value
+ - added user count to info.html
+ - added 'Your Torrents' list to login.html
+ - added the "bnbt_delete_own_torrents" config value
+ - the server waits at most 60 seconds for clients to disconnect when shutting down
+ - added more stylesheet classes and 'return to' links
+ - moderators can change torrent names as well as tags now
+
+Beta 7.11
+ - fixed some login issues with Mozilla Firebird
+ - fixed a bug where comments would not include newlines
+ - fixed a linking issue with Solaris
+ - SOLARIS USERS - IF YOUR SYSTEM IS LITTLE ENDIAN (i.e. Intel), EDIT CBase64.h, sha1.h
+ - the POST decoder reads large uploads before closing to prevent connection refused messages
+
+Beta 7.1
+ - fixed a bug where valid ip addresses would be rejected when sent by the client
+ - fixed a compile error with FreeBSD
+ - fixed several compile warnings
+ - extreme optimizations to the internal database (several times more efficient)
+ - extreme optimizations to the bdecoders (also several times more efficient)
+ - parsing bencoded strings (i.e. torrents, dfile, etc...) should be significantly faster
+ - fixed a bug with peer cache handling
+ - added Pragma: No-Cache to the login page to prevent browsers from caching it
+ - added Content-Length to all pages
+ - Keep-Alive connections are supported
+ - fixed some HTML issues, but comments posted with a previous version of BNBT may not show up correctly
+ - added "save stealers" and "load stealers" to the admin panel
+ - Ctrl-C causes the tracker to shutdown like the admin panel (on Windows only)
+ - error log messages are time stamped
+ - removed some unused code related to ipusers and nfo directories
+ - added the "bnbt_dump_xml_file" config value
+ - added the "bnbt_dump_xml_interval" config value
+
+Beta 7.0
+ - file 'added times' are now displayed in local time, not GMT
+ - added some assorted scripts (mostly length checking) to the comments page
+ - if bnbt_per_page is zero, all files will be displayed on a single page
+ - if parse_allowed_interval is zero, the allowed dir will only be parsed on startup
+ - added the "bnbt_parse_on_upload" config value
+ - fixed some thread issues with non Windows systems
+ - fixed a strange behaviour when bnbt_max_conns were reached
+ - all sizes larger than 1024 GB will show as TB, and all sizes larger than 1024 TB will show as PB
+ - fixed a bug where BNBT would fail to bind the server socket even when available
+ - fixed a memory leak with stealers
+ - fixed a bug with encoding large integers on Windows
+ - removed the "bnbt_header_mode" config value
+ - removed the "bnbt_admin_pass" config value
+ - added users page (users.html)
+ - added tracker info page (info.html)
+ - added signup page (signup.html)
+ - rewrote the admin panel
+ - added the "bnbt_guest_access" config value
+ - added the "bnbt_member_access" config value
+ - added the "bnbt_show_uploader" config value
+ - renamed the "bnbt_log" config value to "bnbt_error_log"
+ - added the "bnbt_access_log_dir" config value
+ - added NCSA common log format logging
+ - the file downloader now works like any other webserver (i.e. /files/image.gif)
+ - peer ip's passed as parameters to /announce can only contain digits and '.'
+ - pruned the changelog
+
+Beta 6.7
+ - fixed another bug where BNBT wouldn't 'sort by share ratio' correctly
+ - unauthorized pages are now returned as HTTP 403 Forbidden, not HTTP 400 Bad Request
+ - fixed a bug where some stealer errors would cause the stealer to 'freak out'
+ - changed the "downloader_timeout_interval" config value to default to 2700 seconds
+ - when "bnbt_allow_sort" is disabled, BNBT will try to sort the index by 'date added' and the stats by 'left'
+ - fixed a bug where BNBT wouldn't display 'average left' or 'left' correctly without "allowed_dir"
+ - moved the 'min left' column to the left of 'average left'
+ - fixed a major memory leak with pthreads (all systems except Windows)
+ - on Windows, BNBT will always set the current directory to the location of bnbt.exe
+ - added the "bnbt_header_mode" config value (for those who want to remove the generated header)
+ - updated BNBT against the official BT CVS track.py
+  * the "keep_dead" config value is already similar to "bnbt_display_all"
+  * added the "max_give" config value
+  * updated /scrape to the new standard
+  * updated the dfile to the new standard (old dfiles are invalid now)
+  * added the "bnbt_show_completed" config value
+  * added the "bnbt_show_transferred" config value
+ - moved the torrent download links to a new column (less confusing)
+ - added an 'info hash' item to each stats and comments page
+ - made the comments pages more user friendly (i.e. less confusing after posting a comment)
+ - pruned the changelog
+
+Beta 6.61
+ - fixed a bug where BNBT would crash when decoding some incorrectly formatted strings
+ - fixed a bug where BNBT wouldn't 'sort by average left' correctly
+ - fixed a bug where BNBT wouldn't 'sort by share ratio' correctly
+ - fixed a bug where BNBT would display the incorrect min/max progress (min/max **left** was correct)
+ - changed the "bnbt_file_expires" config value to default to 180 minutes
+ - the average/min/max columns will only calculate statistics based on leechers and not seeders as well
+ - added the "bnbt_max_conns" config value
+ - when running as a service, BNBT will read the correct bnbt.cfg rather than using system32
+
+Beta 6.6
+ - file sizes are no longer approximated; instead, they're calculated correctly
+ - fixed a bug where BNBT would force the "bnbt_static_header" config value to exist even if unwanted
+ - fixed a bug where BNBT would reject all uploaded files when not using any file tags
+ - added support for counting the number of unique peers as well as total peers
+ - added the "bnbt_count_unique_peers" config value
+ - added support for displaying 'share ratios' (like the share ratios in the experimental client)
+ - added the "bnbt_show_share_ratios" config value
+ - added support for linking to external torrents rather than using the internal downloader
+ - added the "bnbt_external_torrent_dir" config value
+ - added the "bnbt_allow_scrape" config value
+ - renamed the "bnbt_show_file_comments" config value to "bnbt_show_file_comment"
+ - renamed the "bnbt_show_avg_left" config value to "bnbt_show_average_left"
+ - added the "bnbt_show_min_left" config value
+ - added the "bnbt_show_max_left" config value
+ - added the "bnbt_show_left_as_progress" config value
+ - added support for displaying 'good' and 'bad' numbers differently (i.e. colors)
+ - added the "number_red" style sheet class
+ - added the "number_yellow" style sheet class
+ - added the "number_green" style sheet class
+ - added the "name" style sheet class
+ - added the "connected" style sheet class
+ - added the "bnbt_static_footer" config value
+ - optimized the static header and footer to be refreshed every few minutes rather than every page view
+ - added the "bnbt_refresh_static_interval" config value
+ - added support for running BNBT as an NT Service (on Windows)
+ - added support for displaying a progress bar for 'average progress' and peer progres
+ - added the "image_bar_fill" config value
+ - added the "image_bar_trans" config value
+ - the file uploader will now reject files which have the same info hash as another file on the tracker
+ - fixed an issue where BNBT would send extra peer sharing info to clients
+ - moved the file uploader to a seperate page (upload.html)
+
+Beta 6.5
+ - fixed a vulnerability where the file downloader could allow read access to all files on your computer
+ - added 'Content-Disposition: attachment' to the torrent downloader
+ - the log file will now be added to (appended) rather than overwritten
+ - changed the "left" column to display sizes AND percentages
+ - moved the "average left" column to the far right
+ - added a static header to the tracker page
+ - added the "bnbt_static_header" config value
+ - added support for different charsets
+ - added the "bnbt_charset" config value
+ - added support for MinGW and a project file for Dev-C++ (an IDE for MinGW)
+ - added support for file tags
+ - added the "bnbt_tag_file" config value
+ - added the "bnbt_tagx" config values (i.e. bnbt_tag1, bnbt_tag2, bnbt_tag3...)
+ - added support for changing file tags on the admin panel
+ - added support for filtering by file tags on the tracker page
+ - added some basic hard coded mime types
+ - page numbers will now be displayed correctly after searching
+ - fixed a bug where the file downloader would sometimes send back an incorrect filename
+
+Beta 6.4
+ - fixed a bug where BNBT wouldn't display the correct number of peers when using an old dfile
+ - SIGPIPE is now ignored on systems that don't support MSG_NOSIGNAL (cough OS X cough)
+ - fixed a bug where BNBT would always compress in gzip format
+ - fixed a bug where BNBT would sometimes crash when compressing in gzip format
+ - fixed a bug where BNBT would sometimes use up 100% cpu time on Windows
+ - removed the "bnbt_download_dir" config value
+ - removed the "bnbt_show_num_comments" config value (num comments will be shown if comments are allowed)
+ - comments are accessed from the tracker page now (not the stats page)
+ - added a file downloader (a very simple HTTP file server)
+ - added the "bnbt_file_dir" config value
+ - added the "bnbt_file_expires" config value
+ - added the "bnbt_allow_torrent_downloads" config value
+ - renamed "complete" to "seeders" and "downloading" to "leechers"
+ - added an "average left" column to the tracker page
+ - added the "bnbt_show_avg_left" config value
+ - changed the "left" column on the stats page to display as a percentage
+ - added the "percent" style sheet class
+
+Beta 6.3
+ - fixed a bug where BNBT would crash if bnbt.cfg didn't exist (i.e. when starting for the first time)
+ - changed the admin panel so you don't have to type in the password every time
+ - added support for deflate and gzip compression
+ - added the "bnbt_compression_level" config value
+ - added the "bnbt_max_torrents" config value
+ - fixed a bug where BNBT would sometimes crash after parsing the allowed_dir
+
+Beta 6.2
+ - removed dictionary integrity checking (optimization)
+ - added a safe shutdown option to the admin panel (better than killing the process)
+ - fixed a bug where BNBT would use up 100% cpu time when MAX_CONNS were reached
+ - external peers will always be displayed as incomplete peers rather than complete peers
+ - fixed some more potential thread problems (memory problems)
+ - added logging console output to file
+ - added the "bnbt_log" config value
+ - added the "bnbt_flush_interval" config value
+
+Beta 6.1
+ - fixed a thread deadlock when using bnbt_display_all
+ - fixed a lot of potential thread problems (thread deadlock and memory problems)
+ - fixed the console output so it displays correctly when multiple threads are printing
+
+Beta 6.0
+ - rewrote BNBT to use threads
+ - removed the "bnbt_check_external_interval" config value
+ - removed the "bnbt_external_timeout" config value
+ - external peers are now treated the same as internal peers
+ - reduced the default "downloader_timeout_interval" config value
+ - added the "bnbt_max_hops" config value
+ - several code optimizations
+
+Beta 5.7
+ - fixed a bug where BNBT would use up 100% cpu time on some systems
+ - fixed a bug where BNBT wouldn't accept the 'ip' parameter passed by clients
+ - fixed a memory leak when viewing the file stats page
+ - updated the sha1 hashing algorithm
+ - fixed a bug where sha1 hashes were not calculated correctly on OS X
+ - external peers will only be shown on the tracker webpage if at least one stealer is running
+ - optimized most file writing operations (i.e. saving dfile, saving comments, and uploading a file)
+ - added a link to each comments page from the main tracker webpage (when using show_num_comments)
+
+Beta 5.6
+ - fixed several multi tracker/stealer bugs
+ - fixed the multi tracker/stealer to be able to steal from other (non BNBT) tracker programs
+ - added the "bnbt_check_external_interval" config value
+ - added the "bnbt_external_timeout" config value
+ - added support for display file comments (for torrents created with MakeTorrent)
+ - added the "bnbt_show_file_comments" config value
+ - pruned the changelog
+
+Beta 5.5
+ - fixed a minor bug with the HTTP Get decoder
+ - optimizations to the server send code
+ - added the multi tracker/stealer feature (which uses threads)
+ - added support for forcing uploaded files to have a specific announce url
+ - added the "bnbt_force_announce_url" config value
+
+Beta 5.0
+ - fixed a bug where requests received over more than one recv call were ignored
+ - rewrote the server code to use dynamic buffers
+ - fixed a major bug where BNBT would fail under a very heavy load
+ - added a file uploader
+ - added the "bnbt_upload_dir" config value
+
+Beta 4.3
+ - BNBT is now covered under the LGPL
+ - fixed a major bug where BNBT would crash on Linux/Unix under a very heavy or unstable load
+ - minor optimizations to the way BNBT parses torrents in the allowed_dir
+ - fixed a bug where peer "connected times" would show up incorrectly when the tracker was restarted
+ - added sort by number of comments
+ - added sort by connected time
+ - added support for deleting invalid torrents (credit Paul Kehrer)
+ - added "bnbt_delete_invalid" (credit Paul Kehrer)
+
+Beta 4.2
+ - minor optimizations
+ - fixed a bug where sorting by long long's wouldn't sort correctly for large values (overflow error)
+ - added peer "connected times" to the peer tables
+
+Beta 4.1
+ - got rid of some compiler warnings
+ - changed the comments system so it doesn't use <pre> anymore (comments should wrap now)
+ - changed the admin panel to delete all comments for a file if no comment number is entered
+
+Beta 4.0
+ - fixed a bug where file sizes such as "5.01 MB" were displayed as "5.10 MB"
+ - changed sort by name to be case insensitive
+ - added peer totals to the stats webpage
+ - removed the hyperlink on the current page in the page number list
+ - added support for file comments
+ - added support for an admin panel
+ - added the "bnbt_show_num_comments" config value
+ - added the "bnbt_allow_comments" config value
+ - added the "bnbt_comments_file" config value
+ - added the "bnbt_admin_pass" config value
+
+Beta 3.2
+ - added several new style sheet classes
+ - added file information to the stats page (i.e. everything you see on the tracker webpage)
+ - added support for a table of file contents for multi-file torrents
+ - added support for a number of files column
+ - added the "bnbt_show_num_files" config value
+ - added the "bnbt_show_file_contents" config value
+ - renamed "bnbt_show_created" to "bnbt_show_added"
+ - renamed "bnbt_show_file_info" to "bnbt_show_stats"
+
+Beta 3.1
+ - right aligned all "byte" columns (anything representing a size)
+ - modified CAtomLong to use '__int64' or 'long long' instead - this should eliminate all the overflow errors
+ - added sorting to the file info page
+ - changed the file info link class to "stats" since style sheet classes can't have spaces
+ - fixed a couple of HTML issues with the file info page
+
+Beta 3.0
+ - fixed a bug where file sizes weren't displayed properly for files over 200 MB
+ - fixed a bug where expire downloaders would remove file entries when using "bnbt_display_all"
+ - added the "file info" style sheet class
+ - added support for displaying file information (i.e. peer ip's)
+ - added the "bnbt_show_file_info" config value
+
+Beta 2.8
+ - completely rewrote the HTML output code (it was a mess)
+ - added some style sheet classes (see above)
+ - fixed a bug where file modification times weren't read correctly on non-Windows systems
+ - changed the file creation time feature to display file modification time instead
+ - added support for displaying every file in the allowed_dir
+ - added support for file sizes
+ - added the "bnbt_display_all" config value
+ - added the "bnbt_show_size" config value
+
+Beta 2.7
+ - minor optimizations to the socket code on non-Windows systems
+ - fixed download links to correctly link to the right file (even if the torrent has been renamed)
+ - changed the way "bnbt_show_info_hash" works; if set to zero, it removes the Info Hash column completely
+ - renamed "bnbt_show_info_hashes" to "bnbt_show_info_hash"
+ - renamed "bnbt_dl_dir" to "bnbt_download_dir"
+ - added support for file creation times
+ - added the "bnbt_show_created" config value
+
+Beta 2.6
+ - src code is now saved in LF format rather than DOS CR/LF
+ - ported the source to OS X, FreeBSD, and Sun Solaris (credit Shawn Holwegner)
+ - added a makefile (credit Shawn Holwegner)
+ - added support for displaying download links on the tracker webpage
+ - added the "bnbt_dl_dir" config value
+
+Beta 2.51
+ - fixed a bug where page numbers weren't displayed properly
+
+Beta 2.5
+ - removed all requirements for Allegro, BNBT will compile "out of the box" now
+
+Beta 2.2
+ - optimized sort by name
+ - fixed a bug where BNBT would crash when expiring downloaders
+ - renamed "bnbt_perpage" to "bnbt_per_page"
+ - fixed a memory leak when using "allowed_dir" (when searching the directory)
+ - fixed a memory leak when accessing /scrape
+
+Beta 2.11
+ - fixed a bug where BNBT would eat up all system resources if more than 50 torrents were in the allowed_dir
+
+Beta 2.1
+ - fixed a memory leak when using "allowed_dir"
+ - changed the way BNBT parses torrents in the allowed_dir so the tracker can still respond to network requests
+ - added file pages
+ - added the "bnbt_perpage" config value
+ - added the "bnbt_allow_search" config value
+ - added the "bnbt_allow_sort" config value
+ - added the "bnbt_show_info_hashes" config value
+ - added the "bnbt_style_sheet" config value
+
+Beta 2.0
+ - added searching
+ - added sorting
+ - fixed a bug where BNBT would crash in Linux/Unix when 64 simultaneous connections were opened
+ - fixed the HTTP GET decoder to ignore the referrer when checking for parameters
+
+Beta 1.3
+ - optimized the way BNBT encodes and decodes bencoded strings (allowed_dir checking should be much faster now)
+ - added the "bnbt_debug" config value
+
+Beta 1.2
+ - fixed a compile error with GCC (with stl transform)
+ - fixed a bug where BNBT tried to append a backslash to directory names on Linux/Unix when using "allowed_dir"
+ - changed the way BNBT stores info hashes so that BNBT can now save and load standard dfiles
+
+Beta 1.1
+ - ported the source to Unix/Linux
+ - rewrote the network send code to make sure the entire response is sent before continuing
+ - non critical errors do not cause the server to halt anymore
+ - added the "bind" config value

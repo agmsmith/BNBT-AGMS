@@ -1,0 +1,111 @@
+# Project: BNBT
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = objects/bnbt_private.res
+OBJ  = objects/atom.o objects/bencode.o objects/bnbt.o objects/client.o objects/config.o objects/server.o objects/sha1.o objects/tracker.o objects/tracker_admin.o objects/tracker_announce.o objects/tracker_comments.o objects/tracker_file.o objects/tracker_index.o objects/tracker_scrape.o objects/tracker_stats.o objects/tracker_torrent.o objects/util.o objects/tracker_upload.o objects/util_ntservice.o objects/tracker_users.o objects/md5.o objects/tracker_info.o objects/tracker_login.o objects/sort.o objects/tracker_signup.o objects/base64.o objects/bnbt_mysql.o $(RES)
+LINKOBJ  = objects/atom.o objects/bencode.o objects/bnbt.o objects/client.o objects/config.o objects/server.o objects/sha1.o objects/tracker.o objects/tracker_admin.o objects/tracker_announce.o objects/tracker_comments.o objects/tracker_file.o objects/tracker_index.o objects/tracker_scrape.o objects/tracker_stats.o objects/tracker_torrent.o objects/util.o objects/tracker_upload.o objects/util_ntservice.o objects/tracker_users.o objects/md5.o objects/tracker_info.o objects/tracker_login.o objects/sort.o objects/tracker_signup.o objects/base64.o objects/bnbt_mysql.o $(RES)
+LIBS =  -L"lib" -L"C:/Dev-Cpp/lib" -lws2_32 -llibz -lbgd C:/Dev-Cpp/lib/libmySQL.a  -march=i386 
+INCS =  -I"include" 
+CXXINCS =  -I"lib/gcc/mingw32/3.4.2/include"  -I"include/c++/3.4.2/backward"  -I"include/c++/3.4.2/mingw32"  -I"include/c++/3.4.2"  -I"include"  -I"C:/Dev-Cpp/include/MySQL" 
+BIN  = bnbt.exe
+CXXFLAGS = $(CXXINCS) -D__GNUWIN32__ -W -DWIN32 -DNDEBUG -D_CONSOLE -D_MBCS -DXBNBT_GD -DXBNBT_MYSQL   -march=i386
+CFLAGS = $(INCS)   -march=i386
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before bnbt.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "bnbt.exe" $(LIBS)
+
+objects/atom.o: atom.cpp
+	$(CPP) -c atom.cpp -o objects/atom.o $(CXXFLAGS)
+
+objects/bencode.o: bencode.cpp
+	$(CPP) -c bencode.cpp -o objects/bencode.o $(CXXFLAGS)
+
+objects/bnbt.o: bnbt.cpp
+	$(CPP) -c bnbt.cpp -o objects/bnbt.o $(CXXFLAGS)
+
+objects/client.o: client.cpp
+	$(CPP) -c client.cpp -o objects/client.o $(CXXFLAGS)
+
+objects/config.o: config.cpp
+	$(CPP) -c config.cpp -o objects/config.o $(CXXFLAGS)
+
+objects/server.o: server.cpp
+	$(CPP) -c server.cpp -o objects/server.o $(CXXFLAGS)
+
+objects/sha1.o: sha1.cpp
+	$(CPP) -c sha1.cpp -o objects/sha1.o $(CXXFLAGS)
+
+objects/tracker.o: tracker.cpp
+	$(CPP) -c tracker.cpp -o objects/tracker.o $(CXXFLAGS)
+
+objects/tracker_admin.o: tracker_admin.cpp
+	$(CPP) -c tracker_admin.cpp -o objects/tracker_admin.o $(CXXFLAGS)
+
+objects/tracker_announce.o: tracker_announce.cpp
+	$(CPP) -c tracker_announce.cpp -o objects/tracker_announce.o $(CXXFLAGS)
+
+objects/tracker_comments.o: tracker_comments.cpp
+	$(CPP) -c tracker_comments.cpp -o objects/tracker_comments.o $(CXXFLAGS)
+
+objects/tracker_file.o: tracker_file.cpp
+	$(CPP) -c tracker_file.cpp -o objects/tracker_file.o $(CXXFLAGS)
+
+objects/tracker_index.o: tracker_index.cpp
+	$(CPP) -c tracker_index.cpp -o objects/tracker_index.o $(CXXFLAGS)
+
+objects/tracker_scrape.o: tracker_scrape.cpp
+	$(CPP) -c tracker_scrape.cpp -o objects/tracker_scrape.o $(CXXFLAGS)
+
+objects/tracker_stats.o: tracker_stats.cpp
+	$(CPP) -c tracker_stats.cpp -o objects/tracker_stats.o $(CXXFLAGS)
+
+objects/tracker_torrent.o: tracker_torrent.cpp
+	$(CPP) -c tracker_torrent.cpp -o objects/tracker_torrent.o $(CXXFLAGS)
+
+objects/util.o: util.cpp
+	$(CPP) -c util.cpp -o objects/util.o $(CXXFLAGS)
+
+objects/tracker_upload.o: tracker_upload.cpp
+	$(CPP) -c tracker_upload.cpp -o objects/tracker_upload.o $(CXXFLAGS)
+
+objects/util_ntservice.o: util_ntservice.cpp
+	$(CPP) -c util_ntservice.cpp -o objects/util_ntservice.o $(CXXFLAGS)
+
+objects/tracker_users.o: tracker_users.cpp
+	$(CPP) -c tracker_users.cpp -o objects/tracker_users.o $(CXXFLAGS)
+
+objects/md5.o: md5.cpp
+	$(CPP) -c md5.cpp -o objects/md5.o $(CXXFLAGS)
+
+objects/tracker_info.o: tracker_info.cpp
+	$(CPP) -c tracker_info.cpp -o objects/tracker_info.o $(CXXFLAGS)
+
+objects/tracker_login.o: tracker_login.cpp
+	$(CPP) -c tracker_login.cpp -o objects/tracker_login.o $(CXXFLAGS)
+
+objects/sort.o: sort.cpp
+	$(CPP) -c sort.cpp -o objects/sort.o $(CXXFLAGS)
+
+objects/tracker_signup.o: tracker_signup.cpp
+	$(CPP) -c tracker_signup.cpp -o objects/tracker_signup.o $(CXXFLAGS)
+
+objects/base64.o: base64.cpp
+	$(CPP) -c base64.cpp -o objects/base64.o $(CXXFLAGS)
+
+objects/bnbt_mysql.o: bnbt_mysql.cpp
+	$(CPP) -c bnbt_mysql.cpp -o objects/bnbt_mysql.o $(CXXFLAGS)
+
+objects/bnbt_private.res: bnbt_private.rc 
+	$(WINDRES) -i bnbt_private.rc --input-format=rc -o objects/bnbt_private.res -O coff 

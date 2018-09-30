@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>BNBT Documentation - 2.3 Configuring BNBT</title>
+<style type="text/css">
+body
+{
+	background: white;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+</style>
+</head>
+<body>
+<h2><strong>2.3</strong> Configuring BNBT</h2>
+<p>This is a list of the configuration keys in bnbt.cfg.</p>
+<h2>General Configuration Values</h2>
+<ul>
+ <li><strong>allowed_dir (no default):</strong></li><br>
+ <li><strong>announce_interval (default 1800):</strong> the number of seconds each client should wait between announces.</li><br>
+ <li><strong>bind (no default):</strong> the IP address BNBT will bind to. Leave blank to bind to all available IP addresses.</li><br>
+ <li><strong>bnbt_access_log_dir (no default):</strong> the directory where BNBT will place access logs.</li><br>
+ <li><strong>bnbt_allow_comments (default 0):</strong> enable or disable posting of comments.</li><br>
+ <li><strong>bnbt_allow_info_link (default 0):</strong> enable or disable displaying of info links for each torrent on the index page (set with the torrent uploader).</li><br>
+ <li><strong>bnbt_allow_scrape (default 1):</strong> enable or disable scrape access on the index page.</li><br>
+ <li><strong>bnbt_allow_search (default 1):</strong> enable or disable searching of torrents on the index page.</li><br>
+ <li><strong>bnbt_allow_sort (default 1):</strong> enable or disable sorting of torrents.</li><br>
+ <li><strong>bnbt_allow_torrent_downloads (default 1):</strong> </li><br>
+ <li><strong>bnbt_archive_dir (no default):</strong></li><br>
+ <li><strong>bnbt_charset (default "iso-8859-1"):</strong> the charset to include with the Content-Type header.</li><br>
+ <li><strong>bnbt_comment_length (default 800):</strong> the maximum length of comments.</li><br>
+ <li><strong>bnbt_comments_file (no default):</strong> the file to store comments (this is a local path).</li><br>
+ <li><strong>bnbt_compression_level (default 6):</strong> the compression level zlib will use to compress responses. Use 0 to disable compression, 1 for fastest (worst) compression, and 9 for slowest (best) compression.</li><br>
+ <li><strong>bnbt_count_unique_peers (default 1):</strong> enable or disable counting of unique peers.</li><br>
+ <li><strong>bnbt_debug (default 0):</strong> enable or disable printing of debug messages.</li><br>
+ <li><strong>bnbt_delete_invalid (default 0):</strong> enable or disable removal of invalid torrent files.</li><br>
+ <li><strong>bnbt_delete_own_torrents (default 1):</strong> enable or disable access for users to remove their own torrents from the tracker (i.e. torrents they uploaded).</li><br>
+ <li><strong>bnbt_error_log_dir (no default):</strong> the directory where BNBT will place error logs.</li><br>
+ <li><strong>bnbt_external_torrent_dir (no default):</strong></li><br>
+ <li><strong>bnbt_file_dir (no default):</strong> the directory to allow access through the "/files" interface. For example, if you place a file named "hello.txt" in bnbt_file_dir, it can be accessed through "/files/hello.txt" (advanced users note that mime types are hardcoded - this is a local path).</li><br>
+ <li><strong>bnbt_file_expires (default 180):</strong> the number of minutes each browser should cache files accessed through bnbt_file_dir.</li><br>
+ <li><strong>bnbt_flush_interval (default 100):</strong> the number of log messages to queue in memory before flushing to disk.</li><br>
+ <li><strong>bnbt_force_announce_on_download (default 0):</strong> enable or disable forcing the announce URL on each torrent as it is downloaded.</li><br>
+ <li><strong>bnbt_force_announce_url (no default):</strong> the announce URL to 'force' on each uploaded torrent.</li><br>
+ <li><strong>bnbt_guest_access (default 67):</strong> see users.txt.</li><br>
+ <li><strong>bnbt_max_conns (default 64):</strong> the maximum number of simultaneous connections to open.</li><br>
+ <li><strong>bnbt_max_peers_display (default 500):</strong> the maximum number of peers to display on the stats page.</li><br>
+ <li><strong>bnbt_max_recv_size (default 524288):</strong></li><br>
+ <li><strong>bnbt_max_torrents (default 0):</strong></li><br>
+ <li><strong>bnbt_member_access (default 79):</strong> see users.txt.</li><br>
+ <li><strong>bnbt_name_length (default 32):</strong> the maximum length of usernames.</li><br>
+ <li><strong>bnbt_parse_on_upload (default 1):</strong></li><br>
+ <li><strong>bnbt_per_page (default 20):</strong> the number of torrents to display per page on the index page.</li><br>
+ <li><strong>bnbt_realm (default "BNBT"):</strong></li><br>
+ <li><strong>bnbt_refresh_static_interval (default 10):</strong> the number of minutes to wait between refreshing the static header and footer.</li><br>
+ <li><strong>bnbt_refresh_fast_cache_interval (default 10):</strong> the number of seconds to wait <strong>at least</strong> between refreshing the index/scrape data. BNBT will only refresh the fast cache when the specified interval has elapsed AND an index/scrape request has been received.</li><br>
+ <li><strong>bnbt_robots_txt (no default):</strong> the robots.txt file to be returned when /robots.txt is accessed (this is a local path).</li><br>
+ <li><strong>bnbt_show_added (default 1):</strong> enable or disable displaying of dates and times when each torrent was uploaded on the index page.</li><br>
+ <li><strong>bnbt_show_average_dl_rate (default 0):</strong> enable or disable displaying of average peer download rates on the stats page.</li><br>
+ <li><strong>bnbt_show_average_left (default 0):</strong> enable or disable displaying of average left percentages on the index page.</li><br>
+ <li><strong>bnbt_show_average_ul_rate (default 0):</strong> enable or disable displaying of average peer upload rates on the stats page.</li><br>
+ <li><strong>bnbt_show_completed (default 0):</strong> enable or disable displaying of the number of times each torrent has been completed on the index page.</li><br>
+ <li><strong>bnbt_show_file_comment (default 1):</strong></li><br>
+ <li><strong>bnbt_show_file_contents (default 0):</strong></li><br>
+ <li><strong>bnbt_show_gen_time (default 1):</strong> enable or disable displaying of page generation times on some pages.</li><br>
+ <li><strong>bnbt_show_info_hash (default 0):</strong> enable or disable displaying of info hashes on the index page.</li><br>
+ <li><strong>bnbt_show_left_as_progress (default 1):</strong> enable or disable displaying of 'left percentages' as 'progress percentages'.</li><br>
+ <li><strong>bnbt_show_max_left (default 0):</strong> enable or disable displaying of maximum left percentages on the index page.</li><br>
+ <li><strong>bnbt_show_min_left (default 0):</strong> enable or disable displaying of minimum left percentages on the index page.</li><br>
+ <li><strong>bnbt_show_num_files (default 1):</strong> enable or disable displaying of the number of files (inside each torrent) on the index page.</li><br>
+ <li><strong>bnbt_show_share_ratios (default 1):</strong> enable or disable displaying of share ratios on the stats page.</li><br>
+ <li><strong>bnbt_show_size (default 1):</strong> enable or disable displaying of torrent sizes on the index page.</li><br>
+ <li><strong>bnbt_show_stats (default 1):</strong> enable or disable the stats page.</li><br>
+ <li><strong>bnbt_show_transferred (default 0):</strong> enable or disable displaying of the total bytes transferred on each torrent on the index page (total bytes transferred is calculated as completed * size).</li><br>
+ <li><strong>bnbt_show_uploader (default 0):</strong> enable or disable displaying of the username of the uploader on the index page.</li><br>
+ <li><strong>bnbt_static_footer (no default):</strong> the static footer file (this is a local path).</li><br>
+ <li><strong>bnbt_static_header (no default):</strong> the static header file (this is a local path).</li><br>
+ <li><strong>bnbt_style_sheet (no default):</strong> the style sheet (this is a URL).</li><br>
+ <li><strong>bnbt_tag_file (default "tags.bnbt"):</strong> the file to store tags, names, uploaders, and info links (this is a local path).</li><br>
+ <li><strong>bnbt_upload_dir (no default):</strong> the directory to place torrents uploaded with the torrent uploader (often the same as allowed_dir).</li><br>
+ <li><strong>bnbt_users_file (default "users.bnbt"):</strong> the file to store usernames, hashed passwords, access levels, and creation dates and times (this is a local path).</li><br>
+ <li><strong>bnbt_users_per_page (default 50):</strong> the number of users to display per page on the users page.</li><br>
+ <li><strong>dfile = (default "dstate.bnbt"):</strong> the file to store downloader and completes data (this is a local path).</li><br>
+ <li><strong>downloader_timeout_interval (default 2700):</strong> the number of seconds to wait between expiring timed out peers (this should be greater than announce_interval).</li><br>
+ <li><strong>image_bar_fill (no default):</strong></li><br>
+ <li><strong>image_bar_trans (no default):</strong></li><br>
+ <li><strong>keep_dead (default 0):</strong> enable or disable displaying of torrents with 0 seeders and 0 leechers on the index page.</li><br>
+ <li><strong>max_give (default 200):</strong> the maximum number of peers to include with the announce response.</li><br>
+ <li><strong>min_request_interval (default 18000):</strong> the number of seconds each client should wait between scrapes.</li><br>
+ <li><strong>parse_allowed_interval (default 0):</strong> the number of minutes to wait between parsing the allowed dir or 0 to disable parsing the allowed dir (often used with bnbt_parse_on_upload).</li><br>
+ <li><strong>port (default 6969):</strong> the port to listen on.</li><br>
+ <li><strong>response_size (default 50):</strong> the default number of peers to include with the announce response.</li><br>
+ <li><strong>save_dfile_interval (default 300):</strong> the number of seconds to wait between saving the dfile.</li><br>
+ <li><strong>show_names (default 1):</strong> enable or disable displaying of names on the index page.</li><br>
+ <li><strong>socket_timeout (default 15):</strong> the number of seconds to wait before closing inactive connections.</li>
+</ul>
+<h2>MySQL Configuration Values</h2>
+<ul>
+ <li><strong>mysql_database (default "bnbt"):</strong> the database BNBT will use when accessing the MySQL server.</li><br>
+ <li><strong>mysql_host (no default):</strong> the MySQL server BNBT will access (blank means default of "localhost").</li><br>
+ <li><strong>mysql_override_dstate (default 0):</strong> enable or disable per peer queries. Please see the BNBTPHP documentation.</li><br>
+ <li><strong>mysql_password (no default):</strong> the password BNBT will use when accessing the MySQL server.</li><br>
+ <li><strong>mysql_port (default 0):</strong> the port BNBT will use when accessing the MySQL server (0 means default of 3306).</li><br>
+ <li><strong>mysql_refresh_allowed_interval (default 0):</strong> the number of seconds to wait between refreshing the local copy of the ALLOWED table from MySQL. Please see the BNBTPHP documentation.</li><br>
+ <li><strong>mysql_refresh_stats_interval (default 600):</strong> the number of seconds to wait between refreshing the TORRENTS table in MySQL. Please see the BNBTPHP documentation.</li><br>
+ <li><strong>mysql_user (no default):</strong> the user BNBT will use when accessing the MySQL server.</li>
+</ul>
+<h2>RSS Configuration Values</h2>
+<ul>
+ <li><strong>bnbt_rss_channel_copyright (no default):</strong></li><br>
+ <li><strong>bnbt_rss_channel_description (default "BitTorrent RSS Feed for BNBT"):</strong></li><br>
+ <li><strong>bnbt_rss_channel_image_height (default 0):</strong></li><br>
+ <li><strong>bnbt_rss_channel_image_url (no default):</strong></li><br>
+ <li><strong>bnbt_rss_channel_image_width (default 0):</strong></li><br>
+ <li><strong>bnbt_rss_channel_language (default "en-us"):</strong></li><br>
+ <li><strong>bnbt_rss_channel_title (default "My BNBT RSS Feed"):</strong></li><br>
+ <li><strong>bnbt_rss_channel_ttl (default 60):</strong></li><br>
+ <li><strong>bnbt_rss_file (no default):</strong></li><br>
+ <li><strong>bnbt_rss_file_mode (default 0):</strong></li><br>
+ <li><strong>bnbt_rss_interval (default 30):</strong></li><br>
+ <li><strong>bnbt_rss_limit (default 25):</strong></li><br>
+ <li><strong>bnbt_rss_online_dir (no default):</strong></li><br>
+ <li><strong>bnbt_rss_tracker_url (default "http://localhost:6969/"):</strong></li>
+</ul>
+</body>
+</html>
