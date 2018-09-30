@@ -44,9 +44,9 @@ void CSHA1::Reset()
 	m_count[1] = 0;
 }
 
-void CSHA1::Transform(unsigned long state[5], const unsigned char buffer[64])
+void CSHA1::Transform(unsigned int state[5], const unsigned char buffer[64])
 {
-	unsigned long a = 0, b = 0, c = 0, d = 0, e = 0;
+	unsigned int a = 0, b = 0, c = 0, d = 0, e = 0; // 32 bit values needed.
 
 	SHA1_WORKSPACE_BLOCK* block;
 	static unsigned char workspace[64];
@@ -96,7 +96,7 @@ void CSHA1::Transform(unsigned long state[5], const unsigned char buffer[64])
 // Use this function to hash in binary data and strings
 void CSHA1::Update(const unsigned char* data, unsigned int len)
 {
-	unsigned long i = 0, j = 0;
+	unsigned int i = 0, j = 0;
 
 	j = (m_count[0] >> 3) & 63;
 
@@ -123,7 +123,7 @@ void CSHA1::Update(const unsigned char* data, unsigned int len)
 
 void CSHA1::Final()
 {
-	unsigned long i = 0, j = 0;
+	unsigned int i = 0;
 	unsigned char finalcount[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	for (i = 0; i < 8; i++)
@@ -143,7 +143,7 @@ void CSHA1::Final()
 	}
 
 	// Wipe variables for security reasons
-	i = 0; j = 0;
+	i = 0;
 	memset(m_buffer, 0, 64);
 	memset(m_state, 0, 20);
 	memset(m_count, 0, 8);
@@ -156,7 +156,7 @@ void CSHA1::Final()
 void CSHA1::ReportHash(char *szReport, unsigned char uReportType)
 {
 	unsigned char i = 0;
-	char szTemp[4];
+	char szTemp[8];
 
 	if(uReportType == REPORT_HEX)
 	{

@@ -59,7 +59,7 @@ public:
 
 	typedef union {
 		unsigned char c[64];
-		unsigned long l[16];
+		unsigned int l[16];  // 32 bit values needed.
 	} SHA1_WORKSPACE_BLOCK;
 
 	// Two different formats for ReportHash(...)
@@ -69,8 +69,8 @@ public:
 	CSHA1();
 	virtual ~CSHA1();
 
-	unsigned long m_state[5];
-	unsigned long m_count[2];
+	unsigned int m_state[5];  // 32 bit values needed.
+	unsigned int m_count[2];  // 32 bit values needed.
 	unsigned char m_buffer[64];
 	unsigned char m_digest[20];
 
@@ -85,8 +85,8 @@ public:
 	void GetHash(unsigned char *uDest);
 
 private:
-	// Private SHA-1 transformation
-	void Transform(unsigned long state[5], const unsigned char buffer[64]);
+	// Private SHA-1 transformation, state contains 32 bit values.
+	void Transform(unsigned int state[5], const unsigned char buffer[64]);
 };
 
 #endif // ___SHA1_H___
