@@ -621,6 +621,9 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[peer_iter].iDowned ) + "</td>";
 							pResponse->strContent += "<td class=\"connected\">" + UTIL_SecondsToString( pPeersT[peer_iter].iConnected ) + "</td>";
 
+// Don't issue warnings about comparing a float to -1.0 using ==, it's a special flag value that's always exactly -1.0.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-equal"
 							if( m_bShowShareRatios )
 							{
 								pResponse->strContent += "<td class=\"number_";
@@ -649,7 +652,7 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 
 								pResponse->strContent += "</td>";
 							}
-
+#pragma GCC diagnostic pop
 							if( m_bShowAvgULRate )
 							{
 								pResponse->strContent += "<td class=\"number\">";
@@ -828,9 +831,9 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 								if( iSize > 0 )
 								{
 									if( m_bShowLeftAsProgress )
-										iPercent = 100 - (int)( ( (float)pPeersT[leecher_iter].iLeft / iSize ) * 100 );
+										iPercent = 100 - (int)( ( (double) pPeersT[leecher_iter].iLeft / (double) iSize ) * 100 );
 									else
-										iPercent = (int)( ( (float)pPeersT[leecher_iter].iLeft / iSize ) * 100 );
+										iPercent = (int)( ( (double) pPeersT[leecher_iter].iLeft / (double) iSize ) * 100 );
 								}
 
 								pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%)";
@@ -849,6 +852,9 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 
 							pResponse->strContent += "</td><td class=\"connected\">" + UTIL_SecondsToString( pPeersT[leecher_iter].iConnected ) + "</td>";
 
+// Don't issue warnings about comparing a float to -1.0 using ==, it's a special flag value that's always exactly -1.0.
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-equal"
 							if( m_bShowShareRatios )
 							{
 								pResponse->strContent += "<td class=\"number_";
@@ -877,7 +883,7 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 
 								pResponse->strContent += "</td>";
 							}
-
+#pragma GCC diagnostic pop
 							if( m_bShowAvgULRate )
 							{
 								pResponse->strContent += "<td class=\"number\">";

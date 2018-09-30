@@ -471,13 +471,14 @@ void CFG_SetDefaults( )
 	if( CFG_GetInt( "only_local_override_ip", -1 ) < 0 )
 		CFG_SetInt( "only_local_override_ip", 0 );
 
-	if( CFG_GetInt( "bnbt_block_private_ip", -1 ) < 0 )
+	if( CFG_GetInt( "bnbt_block_private_ip", -1 ) < 0 ) {
 		if( CFG_GetInt( "cbtt_block_private_ip", -1 ) >= 0 ) {
             CFG_SetInt( "bnbt_block_private_ip", CFG_GetInt( "cbtt_block_private_ip", -1 ));
 			CFG_Delete( "cbtt_block_private_ip");
 		}
 		else
 			CFG_SetInt( "bnbt_block_private_ip", 0 );
+	}
 
 	/* =X= */
 	// Favicon support

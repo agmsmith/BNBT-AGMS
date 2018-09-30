@@ -720,7 +720,7 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 
 					if( i != iStart )
 					{
-						pResponse->strContent += "<a href=\"/users.html?page=" + CAtomInt( i / m_iUsersPerPage ).toString( );
+						pResponse->strContent += "<a href=\"/users.html?page=" + CAtomInt( (int) i / m_iUsersPerPage ).toString( );
 
 						if( !strSort.empty( ) )
 							pResponse->strContent += "&sort=" + strSort;
@@ -731,7 +731,7 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 						pResponse->strContent += "\">";
 					}
 
-					pResponse->strContent += CAtomInt( ( i / m_iUsersPerPage ) + 1 ).toString( );
+					pResponse->strContent += CAtomInt( ( (int) i / m_iUsersPerPage ) + 1 ).toString( );
 
 					if( i != iStart )
 						pResponse->strContent += "</a>";

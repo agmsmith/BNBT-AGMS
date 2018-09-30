@@ -261,7 +261,7 @@ int asortpByLeft( const void *elem1, const void *elem2 )
 
 int asortpByConnected( const void *elem1, const void *elem2 )
 {
-	return ( (const struct peer_t *)elem1 )->iConnected - ( (const struct peer_t *)elem2 )->iConnected;
+	return (int) (( (const struct peer_t *)elem1 )->iConnected - ( (const struct peer_t *)elem2 )->iConnected);
 }
 
 int asortpByShareRatio( const void *elem1, const void *elem2 )
@@ -331,7 +331,7 @@ int dsortpByLeft( const void *elem1, const void *elem2 )
 
 int dsortpByConnected( const void *elem1, const void *elem2 )
 {
-	return ( (const struct peer_t *)elem2 )->iConnected - ( (const struct peer_t *)elem1 )->iConnected;
+	return (int) (( (const struct peer_t *)elem2 )->iConnected - ( (const struct peer_t *)elem1 )->iConnected);
 }
 
 int dsortpByShareRatio( const void *elem1, const void *elem2 )

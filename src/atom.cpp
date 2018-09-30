@@ -171,7 +171,7 @@ int CAtomString :: EncodedLength( )
 	char pBuf[32];
 	memset( pBuf, 0, sizeof( char ) * 32 );
 	sprintf( pBuf, "%u", iSize );
-	return iSize + strlen( pBuf ) + 1;
+	return iSize + (int) strlen( pBuf ) + 1;
 }
 
 int CAtomString :: Length( )
@@ -283,7 +283,7 @@ vector<CAtom *> CAtomList :: getValue( ) const
 
 vector<CAtom *> *CAtomList :: getValuePtr( ) const
 {
-	return (vector<CAtom *> *)&m_vecList;
+	return const_cast<vector<CAtom *> *>(&m_vecList);
 }
 
 void CAtomList :: setValue( vector<CAtom *> vecList )
@@ -389,7 +389,7 @@ void CAtomDicti :: clear( )
 
 map<string, CAtom *> *CAtomDicti :: getValuePtr( ) const
 {
-	return (map<string, CAtom *> *)&m_mapDicti;
+	return const_cast<map<string, CAtom *> *>(&m_mapDicti);
 }
 
 void CAtomDicti :: delItem( string strKey )

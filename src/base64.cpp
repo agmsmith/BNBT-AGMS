@@ -113,7 +113,7 @@ uchar   pBase64[]   =   {                   // table.
 /*---------------------------------------------------------------------------*/
 char *b64decode(const char *s)
 {
-    int     l = strlen(s);                  // Get length of Base64 string.
+    int     l = (int) strlen(s);            // Get length of Base64 string.
     char   *b;                              // Decoding buffer pointers.
     uchar   c = 0;                          // Character to decode.
     int     x = 0;                          // General purpose integers.
@@ -126,7 +126,7 @@ char *b64decode(const char *s)
     if  (l % 4)                             // If it's not modulo 4, then it...
         return b64isnot(NULL);              // ...can't be a Base64 string.
 
-    if  ((b = (char *) strchr(s, pPad[0])) != NULL)  // Only one, two or three equal...
+    if  ((b = const_cast<char *>(strchr(s, pPad[0]))) != NULL)  // Only one, two or three equal...
     {                                       // ...'=' signs are allowed at...
         if  ((b - s) < (l - 3))             // ...the end of the Base64 string.
             return b64isnot(NULL);          // Any other equal '=' signs are...
@@ -151,26 +151,26 @@ char *b64decode(const char *s)
         switch(x % 4)                       // Decode 4 byte words into...
         {                                   // ...3 byte octets.
         case    0:                          // Byte 0 of word.
-            b[y]    =  c << 2;
+            b[y]    =  (char) (c << 2);
             break;                          
         case    1:                          // Byte 1 of word.
-            b[y]   |=  c >> 4;
+            b[y]   |=  (char) (c >> 4);
 
             if (!b64is7bit((uchar) b[y++])) // Is 1st byte of octet valid?
                 return b64isnot(b);         // No, return false.
 
-            b[y]    = (c & 0x0f) << 4;
+            b[y]    = (char) ((c & 0x0f) << 4);
             break;
         case    2:                          // Byte 2 of word.
-            b[y]   |=  c >> 2;
+            b[y]   |=  (char) (c >> 2);
 
             if (!b64is7bit((uchar) b[y++])) // Is 2nd byte of octet valid?
                 return b64isnot(b);         // No, return false.
 
-            b[y]    = (c & 0x03) << 6;
+            b[y]    = (char) ((c & 0x03) << 6);
             break;
         case    3:                          // Byte 3 of word.
-            b[y]   |=  c;
+            b[y]   |=  (char) c;
 
             if (!b64is7bit((uchar) b[y++])) // Is 3rd byte of octet valid?
                 return b64isnot(b);         // No, return false.
@@ -243,7 +243,7 @@ char *b64isnot(char *b)
 /*---------------------------------------------------------------------------*/
 char *b64buffer(const char *s, bool f)
 {
-    int     l = strlen(s);                  // String size to encode or decode.
+    int     l = (int) strlen(s);            // String size to encode or decode.
 
     if  (!l)                                // If the string size is 0...
         return  NULL;                       // ...return null.

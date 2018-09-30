@@ -411,7 +411,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						pTorrents[torrent_iter].iTransferred = pTorrents[torrent_iter].iCompleted * pTorrents[torrent_iter].iSize;
 
 					if( pTorrents[torrent_iter].iSize > 0 )
-						pTorrents[torrent_iter].iAverageLeftPercent = (unsigned int)( ( (float)pTorrents[torrent_iter].iAverageLeft / pTorrents[torrent_iter].iSize ) * 100 );
+						pTorrents[torrent_iter].iAverageLeftPercent = (unsigned int)( ( (double) pTorrents[torrent_iter].iAverageLeft / (double) pTorrents[torrent_iter].iSize ) * 100 );
 				}
 
 				torrent_iter++;
@@ -1143,10 +1143,10 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							string strTemp = pTorrents[i].strTag;
 
-							for( vector< pair<string, string> > :: iterator j = m_vecTags.begin( ); j != m_vecTags.end( ); j++ )
+							for( vector< pair<string, string> > :: iterator it = m_vecTags.begin( ); it != m_vecTags.end( ); it++ )
 							{
-								if( (*j).first == pTorrents[i].strTag && !(*j).second.empty( ) )
-									pTorrents[i].strTag = "<img class=\"tag\" style=\"border:0\" alt=\"[" + pTorrents[i].strTag + "]\" src=\"" + (*j).second + "\">";
+								if( (*it).first == pTorrents[i].strTag && !(*it).second.empty( ) )
+									pTorrents[i].strTag = "<img class=\"tag\" style=\"border:0\" alt=\"[" + pTorrents[i].strTag + "]\" src=\"" + (*it).second + "\">";
 							}
 
 							if( pTorrents[i].strTag == strTemp )
@@ -1290,9 +1290,9 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 									if( pTorrents[i].iSize > 0 )
 									{
 										if( m_bShowLeftAsProgress )
-											iPercent = 100 - (int)( ( (float)pTorrents[i].iMaxiLeft / pTorrents[i].iSize ) * 100 );
+											iPercent = 100 - (int)( ( (double) pTorrents[i].iMaxiLeft / (double) pTorrents[i].iSize ) * 100 );
 										else
-											iPercent = (int)( ( (float)pTorrents[i].iMinLeft / pTorrents[i].iSize ) * 100 );
+											iPercent = (int)( ( (double) pTorrents[i].iMinLeft / (double) pTorrents[i].iSize ) * 100 );
 									}
 
 									pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%</td>";
@@ -1358,9 +1358,9 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 									if( pTorrents[i].iSize > 0 )
 									{
 										if( m_bShowLeftAsProgress )
-											iPercent = 100 - (int)( ( (float)pTorrents[i].iMinLeft / pTorrents[i].iSize ) * 100 );
+											iPercent = 100 - (int)( ( (double) pTorrents[i].iMinLeft / (double) pTorrents[i].iSize ) * 100 );
 										else
-											iPercent = (int)( ( (float)pTorrents[i].iMaxiLeft / pTorrents[i].iSize ) * 100 );
+											iPercent = (int)( ( (double) pTorrents[i].iMaxiLeft / (double) pTorrents[i].iSize ) * 100 );
 									}
 
 									pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%</td>";
@@ -1439,7 +1439,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 
 					if( i != iStart )
 					{
-						pResponse->strContent += "<a href=\"/index.html?page=" + CAtomInt( i / m_iPerPage ).toString( );
+						pResponse->strContent += "<a href=\"/index.html?page=" + CAtomInt( (int) (i / m_iPerPage) ).toString( );
 
 						if( !strSort.empty( ) )
 							pResponse->strContent += "&amp;sort=" + strSort;
@@ -1453,7 +1453,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						pResponse->strContent += "\">";
 					}
 
-					pResponse->strContent += CAtomInt( ( i / m_iPerPage ) + 1 ).toString( );
+					pResponse->strContent += CAtomInt( (int) ( i / m_iPerPage ) + 1 ).toString( );
 
 					if( i != iStart )
 						pResponse->strContent += "</a>";

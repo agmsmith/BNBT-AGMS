@@ -311,12 +311,12 @@ void CTracker :: serverResponseAnnounce( struct request_t *pRequest, struct resp
 
 						// first three octets
 
-						for( int i = 0; i < 3; i++ )
+						for( int iThree = 0; iThree < 3; iThree++ )
 						{
-							if( pSplit = strstr( szCur, "." ) )
+							if( (pSplit = strstr( szCur, "." )) )
 							{
 								*pSplit = '\0';
-								pCompact[i] = (char)atoi( szCur );
+								pCompact[iThree] = (char)atoi( szCur );
 								szCur = pSplit + 1;
 							}
 							else

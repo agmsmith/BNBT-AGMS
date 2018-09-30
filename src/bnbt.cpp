@@ -205,7 +205,10 @@ int main( int argc, char *argv[] )
 			return 0;
 		}
 	}
-#else
+#else // Not Windows, no command line arguments.
+	(void) argc; // Avoid unused argument warning.
+	(void) argv;
+
 	// disable SIGPIPE since some systems like OS X don't define MSG_NOSIGNAL
 
 	signal( SIGPIPE, SIG_IGN );

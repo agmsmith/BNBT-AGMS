@@ -284,11 +284,10 @@ void CTracker :: serverResponseComments( struct request_t *pRequest, struct resp
 
 						pNew->setItem( "comment", new CAtomString( strComment ) );
 
-						time_t tNow = time( NULL );
-						char *szTime = asctime( localtime( &tNow ) );
-						szTime[strlen( szTime ) - 1] = '\0';
-
-						pNew->setItem( "time", new CAtomString( szTime ) );
+						time_t tNowLocal = time( NULL );
+						char *szTimeLocal = asctime( localtime( &tNowLocal ) );
+						szTimeLocal[strlen( szTimeLocal ) - 1] = '\0';
+						pNew->setItem( "time", new CAtomString( szTimeLocal ) );
 
 						dynamic_cast<CAtomList *>( pComments )->addItem( pNew );
 
@@ -371,7 +370,7 @@ void CTracker :: serverResponseComments( struct request_t *pRequest, struct resp
 							// header
 							//
 
-							pResponse->strContent += "<tr class=\"com_header\"><td class=\"com_header\"><code>Comment " + CAtomInt( i + 1 ).toString( ) + " posted by ";
+							pResponse->strContent += "<tr class=\"com_header\"><td class=\"com_header\"><code>Comment " + CAtomInt( (int) i + 1 ).toString( ) + " posted by ";
 
 							if( !strName.empty( ) )
 								pResponse->strContent += "<strong>" + UTIL_RemoveHTML( strName ) + "</strong> (";
@@ -384,7 +383,7 @@ void CTracker :: serverResponseComments( struct request_t *pRequest, struct resp
 							pResponse->strContent += " on " + strTime;
 
 							if( pRequest->user.iAccess & ACCESS_EDIT )
-								pResponse->strContent += " [<a href=\"/comments.html?info_hash=" + strHashString + "&del=" + CAtomInt( i + 1 ).toString( ) + "\">Delete</a>]";
+								pResponse->strContent += " [<a href=\"/comments.html?info_hash=" + strHashString + "&del=" + CAtomInt( (int) i + 1 ).toString( ) + "\">Delete</a>]";
 
 							pResponse->strContent += "</code></td></tr>\n";
 

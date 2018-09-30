@@ -684,7 +684,7 @@ void CTracker :: saveXML( )
 		return;
 	}
 
-	fwrite( (void *)strData.c_str( ), sizeof( char ), strData.size( ), pFile );
+	fwrite( strData.c_str( ), sizeof( char ), strData.size( ), pFile );
 	fclose( pFile );
 }
 
@@ -749,15 +749,15 @@ void CTracker :: saveRSS( string strChannelTag )
 	else
 		strDate += " +";
 
-	if( abs( timezone / 3600 ) % 60 < 10 )
+	if( abs( (int) timezone / 3600 ) % 60 < 10 )
 		strDate += "0";
 		
-	strDate += CAtomInt( abs( timezone / 3600 ) % 60 ).toString( );
+	strDate += CAtomInt( abs( (int) timezone / 3600 ) % 60 ).toString( );
 
-	if( abs( timezone / 60 ) % 60 < 10 )
+	if( abs( (int) timezone / 60 ) % 60 < 10 )
 		strDate += "0";
 
-	strDate += CAtomInt( abs( timezone / 60 ) % 60 ).toString( );
+	strDate += CAtomInt( abs( (int) timezone / 60 ) % 60 ).toString( );
 
 	// more tags
 
@@ -879,7 +879,7 @@ void CTracker :: saveRSS( string strChannelTag )
 				else
 					strTorrentLink = m_strExternalTorrentDir + UTIL_StringToEscapedStrict( pTorrents[i].strFileName );
 
-				int iFileSize = UTIL_SizeFile( string( m_strAllowedDir + pTorrents[i].strFileName ).c_str( ) );
+				int iFileSize = (int) UTIL_SizeFile( string( m_strAllowedDir + pTorrents[i].strFileName ).c_str( ) );
 
 				string strInfoLink;
 
@@ -985,7 +985,7 @@ void CTracker :: expireDownloaders( )
 
 				for( map<string, CAtom *> :: iterator j = pmapPeersDicti->begin( ); j != pmapPeersDicti->end( ); )
 				{
-					if( dynamic_cast<CAtomLong *>( (*j).second ) && dynamic_cast<CAtomLong *>( (*j).second )->getValue( ) < m_iPrevTime )
+					if( dynamic_cast<CAtomLong *>( (*j).second ) && dynamic_cast<CAtomLong *>( (*j).second )->getValue( ) < (long) m_iPrevTime )
 					{
 						if( m_pDFile )
 						{
@@ -1928,9 +1928,9 @@ void CTracker :: RefreshFastCache( )
 
 				CAtomList *pList = new CAtomList( );
 
-				pList->addItem( new CAtomInt( iSeeders ) );
-				pList->addItem( new CAtomInt( iLeechers ) );
-				pList->addItem( new CAtomInt( iCompleted ) );
+				pList->addItem( new CAtomInt( (int) iSeeders ) );
+				pList->addItem( new CAtomInt( (int) iLeechers ) );
+				pList->addItem( new CAtomInt( (int) iCompleted ) );
 				pList->addItem( new CAtomLong( iTotalLeft ) );
 				pList->addItem( new CAtomLong( iMinLeft ) );
 				pList->addItem( new CAtomLong( iMaxiLeft ) );
@@ -1983,6 +1983,8 @@ void CTracker :: serverResponseGET( struct request_t *pRequest, struct response_
 /* =X= */
 void CTracker :: serverResponseNotFound( struct request_t *pRequest, struct response_t *pResponse )
 {
+	(void) pRequest; // Unused argument.
+
 	pResponse->strCode = "404 Not Found";
 		
 	pResponse->mapHeaders.insert( pair<string, string>( "Content-Type", gmapMime[".txt"] ) );
@@ -2005,6 +2007,8 @@ void CTracker :: serverResponsePOST( struct request_t *pRequest, struct response
 
 void CTracker :: serverResponseRobots( struct request_t *pRequest, struct response_t *pResponse )
 {
+	(void) pRequest; // Unused argument.
+
 	pResponse->strCode = "200 OK";
 
 	pResponse->mapHeaders.insert( pair<string, string>( "Content-Type", gmapMime[".txt"] ) );  /* =X= */

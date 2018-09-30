@@ -106,13 +106,13 @@ void CTracker :: serverResponseInfo( struct request_t *pRequest, struct response
 
 	if( pRequest->user.iAccess & ACCESS_VIEW )
 	{
-		time_t tNow = time( NULL );
-		char *szTime = asctime( localtime( &tNow ) );
-		szTime[strlen( szTime ) - 1] = '\0';
+		time_t tNowLocal = time( NULL );
+		char *szTimeLocal = asctime( localtime( &tNowLocal ) );
+		szTimeLocal[strlen( szTimeLocal ) - 1] = '\0';
 
 		pResponse->strContent += "<ul>\n";
 		pResponse->strContent += "<li><strong>Tracker Version:</strong> BNBT " + string( BNBT_VER ) + "</li>\n";
-		pResponse->strContent += "<li><strong>Server Time:</strong> " + string( szTime ) + "</li>\n";
+		pResponse->strContent += "<li><strong>Server Time:</strong> " + string( szTimeLocal ) + "</li>\n";
 		pResponse->strContent += "<li><strong>Uptime:</strong> " + UTIL_SecondsToString( GetTime( ) ) + "</li>\n";
 
 		if( m_pDFile )
@@ -157,7 +157,8 @@ void CTracker :: serverResponseInfo( struct request_t *pRequest, struct response
 // Added /info.bencode support- DWK
 void CTracker :: serverResponseBencodeInfo( struct request_t *pRequest, struct response_t *pResponse )
 {
-    pResponse->strCode = "200 OK";
+	(void) pRequest; // Unused variable, make compiler not warn about that.
+	pResponse->strCode = "200 OK";
 	pResponse->mapHeaders.insert( pair<string, string>( "Content-Type", string( "text/plain" ) ) );
 
 	CAtomDicti *pData = new CAtomDicti( );

@@ -98,7 +98,7 @@ bool CClient :: Update( )
 
 			memset( gpBuf, 0, sizeof( char ) * GPBUF_SIZE );
 
-			int c = recv( m_sckClient, gpBuf, GPBUF_SIZE, 0 );
+			int c = (int) recv( m_sckClient, gpBuf, GPBUF_SIZE, 0 );
 
 			if( c == SOCKET_ERROR && GetLastError( ) != EWOULDBLOCK )
 			{
@@ -376,7 +376,7 @@ bool CClient :: Update( )
 
 			memset( gpBuf, 0, sizeof( char ) * GPBUF_SIZE );
 
-			int c = recv( m_sckClient, gpBuf, GPBUF_SIZE, 0 );
+			int c = (int) recv( m_sckClient, gpBuf, GPBUF_SIZE, 0 );
 
 			if( c == SOCKET_ERROR && GetLastError( ) != EWOULDBLOCK )
 			{
@@ -443,14 +443,14 @@ bool CClient :: Update( )
 		{
 			// allocate avail_in * 1.001 + 18 bytes (12 + 6 for gzip)
 
-			unsigned int iSize = (unsigned int)( rsp.strContent.size( ) * 1.001 + 18 );
+			unsigned int iSize = (unsigned int)( (double) rsp.strContent.size( ) * 1.001 + 18 );
 
 			unsigned char *pBuf = new unsigned char[iSize];
 			memset( pBuf, 0, sizeof( unsigned char ) * iSize );
 
 			z_stream_s zCompress;
 
-			zCompress.next_in = (unsigned char *)rsp.strContent.c_str( );
+			zCompress.next_in = (unsigned char *) const_cast<char *>(rsp.strContent.c_str( ));
 			zCompress.avail_in = (uInt)rsp.strContent.size( );
 			zCompress.next_out = pBuf;
 			zCompress.avail_out = iSize;
@@ -495,7 +495,7 @@ bool CClient :: Update( )
 				else
 				{
 					if( iResult != Z_OK )
-						UTIL_LogPrint( "client warning - (zlib) deflate error (%d) on \"%s\", in = %u, sending raw\n", iResult, rqst.strURL.c_str( ), rsp.strContent.size( ) );
+						UTIL_LogPrint( "client warning - (zlib) deflate error (%d) on \"%s\", in = %u, sending raw\n", iResult, rqst.strURL.c_str( ), (unsigned int) rsp.strContent.size( ) );
 
 					deflateEnd( &zCompress );
 
@@ -581,7 +581,7 @@ bool CClient :: Update( )
 		{
 			m_iLast = GetTime( );
 
-			int s = send( m_sckClient, m_strSendBuf.c_str( ), (int)m_strSendBuf.size( ), MSG_NOSIGNAL );
+			int s = (int) send( m_sckClient, m_strSendBuf.c_str( ), (int)m_strSendBuf.size( ), MSG_NOSIGNAL );
 
 			if( s == SOCKET_ERROR && GetLastError( ) != EWOULDBLOCK )
 			{
