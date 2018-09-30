@@ -28,6 +28,7 @@
 #endif
 
 #include <stdarg.h>
+#include <sys/stat.h>
 
 #include "bnbt.h"
 #include "atom.h"
@@ -674,9 +675,23 @@ string UTIL_InfoHash( CAtom *pTorrent )
 	return string( );
 }
 
+
 bool UTIL_CheckFile( const char *szFile )
 {
-	// check if file exists
+        struct stat fileStat;
+
+        if( szFile == NULL || szFile[0] == 0)
+                return false;
+
+        // Check if file exists and is a regular file, not a directory etc.
+
+        if( stat( szFile, &fileStat ) != 0 )
+                return false;
+
+        if ( ! S_ISREG( fileStat.st_mode ))
+                return false;
+
+        // See if it can be opened.
 
 	FILE *pFile = NULL;
 
