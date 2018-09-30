@@ -1,0 +1,4 @@
+# AGMS20180925 Ignore compiler output and things that don't need saving.
+*.log
+*.o
+bnbt
