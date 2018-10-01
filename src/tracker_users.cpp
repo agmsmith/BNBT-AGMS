@@ -481,15 +481,19 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 
 			// add the users into this structure one by one and sort it afterwards
 
-			struct user_t *pUsersT = new struct user_t[iKeySize];
+			struct user_t *aUsersT = new struct user_t[iKeySize];
+			struct user_t **pUsersT = new struct user_t * [iKeySize];
+			unsigned long int iUser;
+			for( iUser = 0; iUser < iKeySize; iUser++ )
+				pUsersT[iUser] = aUsersT + iUser;
 
 			unsigned long user_iter = 0;
 
 			for( map<string, CAtom *> :: iterator it = pmapDicti->begin( ); it != pmapDicti->end( ); it++ )
 			{
-				pUsersT[user_iter].strLogin = (*it).first;
-				pUsersT[user_iter].strLowerLogin = UTIL_ToLower( pUsersT[user_iter].strLogin );
-				pUsersT[user_iter].iAccess = m_iGuestAccess;
+				pUsersT[user_iter]->strLogin = (*it).first;
+				pUsersT[user_iter]->strLowerLogin = UTIL_ToLower( pUsersT[user_iter]->strLogin );
+				pUsersT[user_iter]->iAccess = m_iGuestAccess;
 
 				if( (*it).second->isDicti( ) )
 				{
@@ -499,19 +503,19 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 					CAtom *pCreated = ( (CAtomDicti *)(*it).second )->getItem( "created" );
 
 					if( pMD5 )
-						pUsersT[user_iter].strMD5 = pMD5->toString( );
+						pUsersT[user_iter]->strMD5 = pMD5->toString( );
 
 					if( pMail )
 					{
-						pUsersT[user_iter].strMail = pMail->toString( );
-						pUsersT[user_iter].strLowerMail = UTIL_ToLower( pUsersT[user_iter].strMail );
+						pUsersT[user_iter]->strMail = pMail->toString( );
+						pUsersT[user_iter]->strLowerMail = UTIL_ToLower( pUsersT[user_iter]->strMail );
 					}
 
 					if( pAccess && dynamic_cast<CAtomLong *>( pAccess ) )
-						pUsersT[user_iter].iAccess = (int)dynamic_cast<CAtomLong *>( pAccess )->getValue( );
+						pUsersT[user_iter]->iAccess = (int)dynamic_cast<CAtomLong *>( pAccess )->getValue( );
 
 					if( pCreated )
-						pUsersT[user_iter].strCreated = pCreated->toString( );
+						pUsersT[user_iter]->strCreated = pCreated->toString( );
 				}
 
 				user_iter++;
@@ -524,33 +528,33 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 				int iSort = atoi( strSort.c_str( ) );
 
 				if( iSort == SORTU_ALOGIN )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), asortuByLogin );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), asortuByLogin );
 				else if( iSort == SORTU_AACCESS )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), asortuByAccess );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), asortuByAccess );
 				else if( iSort == SORTU_AEMAIL )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), asortuByMail );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), asortuByMail );
 				else if( iSort == SORTU_ACREATED )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), asortuByCreated );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), asortuByCreated );
 				else if( iSort == SORTU_DLOGIN )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), dsortuByLogin );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), dsortuByLogin );
 				else if( iSort == SORTU_DACCESS )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), dsortuByAccess );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), dsortuByAccess );
 				else if( iSort == SORTU_DEMAIL )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), dsortuByMail );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), dsortuByMail );
 				else if( iSort == SORTU_DCREATED )
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), dsortuByCreated );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), dsortuByCreated );
 				else
 				{
 					// default action is to sort by created
 
-					qsort( pUsersT, iKeySize, sizeof( struct user_t ), dsortuByCreated );
+					qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), dsortuByCreated );
 				}
 			}
 			else
 			{
 				// default action is to sort by created
 
-				qsort( pUsersT, iKeySize, sizeof( struct user_t ), dsortuByCreated );
+				qsort( pUsersT, iKeySize, sizeof( pUsersT[0] ), dsortuByCreated );
 			}
 
 			// some preliminary search crap
@@ -591,7 +595,7 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 				{
 					// only display entries that match the search
 
-					if( pUsersT[i].strLowerLogin.find( strLowerSearch ) == string :: npos )
+					if( pUsersT[i]->strLowerLogin.find( strLowerSearch ) == string :: npos )
 						continue;
 				}
 
@@ -668,21 +672,21 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 							pResponse->strContent += "<tr class=\"odd\">";
 
 						pResponse->strContent += "<td class=\"name\">";
-						pResponse->strContent += UTIL_RemoveHTML( pUsersT[i].strLogin );
+						pResponse->strContent += UTIL_RemoveHTML( pUsersT[i]->strLogin );
 						pResponse->strContent += "</td><td>";
-						pResponse->strContent += UTIL_AccessToString( pUsersT[i].iAccess );
+						pResponse->strContent += UTIL_AccessToString( pUsersT[i]->iAccess );
 						pResponse->strContent += "</td><td>";
-						pResponse->strContent += UTIL_RemoveHTML( pUsersT[i].strMail );
+						pResponse->strContent += UTIL_RemoveHTML( pUsersT[i]->strMail );
 						pResponse->strContent += "</td><td>";
 
-						if( !pUsersT[i].strCreated.empty( ) )
+						if( !pUsersT[i]->strCreated.empty( ) )
 						{
 							// strip year and seconds from time
 
-							pResponse->strContent += pUsersT[i].strCreated.substr( 5, pUsersT[i].strCreated.size( ) - 8 );
+							pResponse->strContent += pUsersT[i]->strCreated.substr( 5, pUsersT[i]->strCreated.size( ) - 8 );
 						}
 
-						pResponse->strContent += "</td><td>[<a href=\"/users.html?user=" + UTIL_StringToEscaped( pUsersT[i].strLogin ) + "&action=edit\">Edit</a>] [<a href=\"/users.html?user=" + UTIL_StringToEscaped( pUsersT[i].strLogin ) + "&action=delete\">Delete</a>]</td></tr>\n";
+						pResponse->strContent += "</td><td>[<a href=\"/users.html?user=" + UTIL_StringToEscaped( pUsersT[i]->strLogin ) + "&action=edit\">Edit</a>] [<a href=\"/users.html?user=" + UTIL_StringToEscaped( pUsersT[i]->strLogin ) + "&action=delete\">Delete</a>]</td></tr>\n";
 
 						iAdded++;
 					}
@@ -692,6 +696,7 @@ void CTracker :: serverResponseUsers( struct request_t *pRequest, struct respons
 			}
 
 			delete [] pUsersT;
+			delete [] aUsersT;
 
 			// some finishing touches
 

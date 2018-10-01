@@ -384,17 +384,22 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 
 					// add the peers into this structure one by one and sort it afterwards
 
-					struct peer_t *pPeersT = new struct peer_t[pmapPeersDicti->size( )];
+					unsigned long int iPeerCount = pmapPeersDicti->size( );
+					struct peer_t *aPeersT = new struct peer_t [iPeerCount];
+					struct peer_t **pPeersT = new struct peer_t * [iPeerCount];
+					unsigned long int iPeer;
+					for( iPeer = 0; iPeer < iPeerCount; iPeer++ )
+						pPeersT[iPeer] = aPeersT + iPeer;
 
 					unsigned long i = 0;
 
 					for( map<string, CAtom *> :: iterator it = pmapPeersDicti->begin( ); it != pmapPeersDicti->end( ); it++ )
 					{
-						pPeersT[i].iUpped = 0;
-						pPeersT[i].iDowned = 0;
-						pPeersT[i].iLeft = 0;
-						pPeersT[i].iConnected = 0;
-						pPeersT[i].flShareRatio = 0.0;
+						pPeersT[i]->iUpped = 0;
+						pPeersT[i]->iDowned = 0;
+						pPeersT[i]->iLeft = 0;
+						pPeersT[i]->iConnected = 0;
+						pPeersT[i]->flShareRatio = 0.0;
 
 						if( (*it).second->isDicti( ) )
 						{
@@ -408,44 +413,44 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 
 							if( pIP )
 							{
-								pPeersT[i].strIP = pIP->toString( );
+								pPeersT[i]->strIP = pIP->toString( );
 
 								// strip ip
 
-								string :: size_type iStart = pPeersT[i].strIP.rfind( "." );
+								string :: size_type iStart = pPeersT[i]->strIP.rfind( "." );
 
 								if( iStart != string :: npos )
 								{
 									// don't strip ip for mods
 
 									if( !( pRequest->user.iAccess & ACCESS_EDIT ) )
-										pPeersT[i].strIP = pPeersT[i].strIP.substr( 0, iStart + 1 ) + "xxx";
+										pPeersT[i]->strIP = pPeersT[i]->strIP.substr( 0, iStart + 1 ) + "xxx";
 								}
 							}
 
 							if( pUpped && dynamic_cast<CAtomLong *>( pUpped ) )
-								pPeersT[i].iUpped = dynamic_cast<CAtomLong *>( pUpped )->getValue( );
+								pPeersT[i]->iUpped = dynamic_cast<CAtomLong *>( pUpped )->getValue( );
 
 							if( pDowned && dynamic_cast<CAtomLong *>( pDowned ) )
 							{
-								pPeersT[i].iDowned = dynamic_cast<CAtomLong *>( pDowned )->getValue( );
+								pPeersT[i]->iDowned = dynamic_cast<CAtomLong *>( pDowned )->getValue( );
 
 								if( m_bShowShareRatios )
 								{
-									if( pPeersT[i].iDowned > 0 )
-										pPeersT[i].flShareRatio = (float)pPeersT[i].iUpped / (float)pPeersT[i].iDowned;
-									else if( pPeersT[i].iUpped == 0 )
-										pPeersT[i].flShareRatio = 0.0;
+									if( pPeersT[i]->iDowned > 0 )
+										pPeersT[i]->flShareRatio = (float)pPeersT[i]->iUpped / (float)pPeersT[i]->iDowned;
+									else if( pPeersT[i]->iUpped == 0 )
+										pPeersT[i]->flShareRatio = 0.0;
 									else
-										pPeersT[i].flShareRatio = -1.0;
+										pPeersT[i]->flShareRatio = -1.0;
 								}
 							}
 
 							if( pLef && dynamic_cast<CAtomLong *>( pLef ) )
-								pPeersT[i].iLeft = dynamic_cast<CAtomLong *>( pLef )->getValue( );
+								pPeersT[i]->iLeft = dynamic_cast<CAtomLong *>( pLef )->getValue( );
 
 							if( pConn && dynamic_cast<CAtomLong *>( pConn ) )
-								pPeersT[i].iConnected = GetTime( ) - (unsigned long)dynamic_cast<CAtomLong *>( pConn )->getValue( );
+								pPeersT[i]->iConnected = GetTime( ) - (unsigned long)dynamic_cast<CAtomLong *>( pConn )->getValue( );
 						}
 
 						i++;
@@ -460,50 +465,50 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							int iSort = atoi( strSort.c_str( ) );
 
 							if( iSort == SORTP_AUPPED )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByUpped );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByUpped );
 							else if( iSort == SORTP_ADOWNED )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByDowned );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByDowned );
 							else if( iSort == SORTP_ALEFT )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByLeft );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByLeft );
 							else if( iSort == SORTP_ACONNECTED )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByConnected );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByConnected );
 							else if( iSort == SORTP_ASHARERATIO )
 							{
 								if( m_bShowShareRatios )
-									qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByShareRatio );
+									qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByShareRatio );
 							}
 							else if( iSort == SORTP_DUPPED )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), dsortpByUpped );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), dsortpByUpped );
 							else if( iSort == SORTP_DDOWNED )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), dsortpByDowned );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), dsortpByDowned );
 							else if( iSort == SORTP_DLEFT )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), dsortpByLeft );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), dsortpByLeft );
 							else if( iSort == SORTP_DCONNECTED )
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), dsortpByConnected );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), dsortpByConnected );
 							else if( iSort == SORTP_DSHARERATIO )
 							{
 								if( m_bShowShareRatios )
-									qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), dsortpByShareRatio );
+									qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), dsortpByShareRatio );
 							}
 							else
 							{
 								// default action is to sort by left
 
-								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByLeft );
+								qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByLeft );
 							}
 						}
 						else
 						{
 							// default action is to sort by left
 
-							qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByLeft );
+							qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByLeft );
 						}
 					}
 					else
 					{
 						// sort is disabled, but default action is to sort by left
 
-						qsort( pPeersT, pmapPeersDicti->size( ), sizeof( struct peer_t ), asortpByLeft );
+						qsort( pPeersT, pmapPeersDicti->size( ), sizeof( pPeersT[0] ), asortpByLeft );
 					}
 
 					bool bFound = false;
@@ -521,7 +526,7 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 						if( iAdded >= m_iMaxPeersDisplay )
 							break;
 
-						if( pPeersT[peer_iter].iLeft == 0 )
+						if( pPeersT[peer_iter]->iLeft == 0 )
 						{
 							if( !bFound )
 							{
@@ -616,10 +621,10 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							else
 								pResponse->strContent += "<tr class=\"odd\">";
 
-							pResponse->strContent += "<td class=\"ip\">" + pPeersT[peer_iter].strIP + "</td>";
-							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[peer_iter].iUpped ) + "</td>";
-							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[peer_iter].iDowned ) + "</td>";
-							pResponse->strContent += "<td class=\"connected\">" + UTIL_SecondsToString( pPeersT[peer_iter].iConnected ) + "</td>";
+							pResponse->strContent += "<td class=\"ip\">" + pPeersT[peer_iter]->strIP + "</td>";
+							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[peer_iter]->iUpped ) + "</td>";
+							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[peer_iter]->iDowned ) + "</td>";
+							pResponse->strContent += "<td class=\"connected\">" + UTIL_SecondsToString( pPeersT[peer_iter]->iConnected ) + "</td>";
 
 // Don't issue warnings about comparing a float to -1.0 using ==, it's a special flag value that's always exactly -1.0.
 #pragma GCC diagnostic push
@@ -628,24 +633,24 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							{
 								pResponse->strContent += "<td class=\"number_";
 
-								if( pPeersT[peer_iter].flShareRatio == -1.0 )
+								if( pPeersT[peer_iter]->flShareRatio == -1.0 )
 									pResponse->strContent += "green\">";
-								else if( pPeersT[peer_iter].flShareRatio < 0.8 )
+								else if( pPeersT[peer_iter]->flShareRatio < 0.8 )
 									pResponse->strContent += "red\">";
-								else if( pPeersT[peer_iter].flShareRatio < 1.2 )
+								else if( pPeersT[peer_iter]->flShareRatio < 1.2 )
 									pResponse->strContent += "yellow\">";
 								else
 									pResponse->strContent += "green\">";
 
 								// turn the share ratio into a string
 
-								if( pPeersT[peer_iter].flShareRatio == -1.0 )
+								if( pPeersT[peer_iter]->flShareRatio == -1.0 )
 									pResponse->strContent += "Perfect";
 								else
 								{
 									char szFloat[16];
 									memset( szFloat, 0, sizeof( char ) * 16 );
-									sprintf( szFloat, "%0.3f", pPeersT[peer_iter].flShareRatio );
+									sprintf( szFloat, "%0.3f", pPeersT[peer_iter]->flShareRatio );
 
 									pResponse->strContent += szFloat;
 								}
@@ -657,8 +662,8 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							{
 								pResponse->strContent += "<td class=\"number\">";
 
-								if( pPeersT[peer_iter].iConnected > 0 )
-									pResponse->strContent += UTIL_BytesToString( pPeersT[peer_iter].iUpped / pPeersT[peer_iter].iConnected ) + "/sec";
+								if( pPeersT[peer_iter]->iConnected > 0 )
+									pResponse->strContent += UTIL_BytesToString( pPeersT[peer_iter]->iUpped / pPeersT[peer_iter]->iConnected ) + "/sec";
 								else
 									pResponse->strContent += "N/A";
 
@@ -696,7 +701,7 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 						if( iAdded >= m_iMaxPeersDisplay )
 							break;
 
-						if( pPeersT[leecher_iter].iLeft != 0 )
+						if( pPeersT[leecher_iter]->iLeft != 0 )
 						{
 							if( !bFound )
 							{
@@ -812,15 +817,15 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							else
 								pResponse->strContent += "<tr class=\"odd\">";
 
-							pResponse->strContent += "<td class=\"ip\">" + pPeersT[leecher_iter].strIP + "</td>";
-							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[leecher_iter].iUpped ) + "</td>";
-							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[leecher_iter].iDowned ) + "</td>";
+							pResponse->strContent += "<td class=\"ip\">" + pPeersT[leecher_iter]->strIP + "</td>";
+							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[leecher_iter]->iUpped ) + "</td>";
+							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pPeersT[leecher_iter]->iDowned ) + "</td>";
 							pResponse->strContent += "<td class=\"percent\">";
 
 							if( m_pAllowed && m_bShowLeftAsProgress )
-								pResponse->strContent += UTIL_BytesToString( iSize - pPeersT[leecher_iter].iLeft );
+								pResponse->strContent += UTIL_BytesToString( iSize - pPeersT[leecher_iter]->iLeft );
 							else
-								pResponse->strContent += UTIL_BytesToString( pPeersT[leecher_iter].iLeft );
+								pResponse->strContent += UTIL_BytesToString( pPeersT[leecher_iter]->iLeft );
 
 							if( m_pAllowed )
 							{
@@ -831,9 +836,9 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 								if( iSize > 0 )
 								{
 									if( m_bShowLeftAsProgress )
-										iPercent = 100 - (int)( ( (double) pPeersT[leecher_iter].iLeft / (double) iSize ) * 100 );
+										iPercent = 100 - (int)( ( (double) pPeersT[leecher_iter]->iLeft / (double) iSize ) * 100 );
 									else
-										iPercent = (int)( ( (double) pPeersT[leecher_iter].iLeft / (double) iSize ) * 100 );
+										iPercent = (int)( ( (double) pPeersT[leecher_iter]->iLeft / (double) iSize ) * 100 );
 								}
 
 								pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%)";
@@ -850,7 +855,7 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 								}
 							}
 
-							pResponse->strContent += "</td><td class=\"connected\">" + UTIL_SecondsToString( pPeersT[leecher_iter].iConnected ) + "</td>";
+							pResponse->strContent += "</td><td class=\"connected\">" + UTIL_SecondsToString( pPeersT[leecher_iter]->iConnected ) + "</td>";
 
 // Don't issue warnings about comparing a float to -1.0 using ==, it's a special flag value that's always exactly -1.0.
 #pragma GCC diagnostic push
@@ -859,24 +864,24 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							{
 								pResponse->strContent += "<td class=\"number_";
 
-								if( pPeersT[leecher_iter].flShareRatio == -1.0 )
+								if( pPeersT[leecher_iter]->flShareRatio == -1.0 )
 									pResponse->strContent += "green\">";
-								else if( pPeersT[leecher_iter].flShareRatio < 0.8 )
+								else if( pPeersT[leecher_iter]->flShareRatio < 0.8 )
 									pResponse->strContent += "red\">";
-								else if( pPeersT[leecher_iter].flShareRatio < 1.2 )
+								else if( pPeersT[leecher_iter]->flShareRatio < 1.2 )
 									pResponse->strContent += "yellow\">";
 								else
 									pResponse->strContent += "green\">";
 
 								// turn the share ratio into a string
 
-								if( pPeersT[leecher_iter].flShareRatio == -1.0 )
+								if( pPeersT[leecher_iter]->flShareRatio == -1.0 )
 									pResponse->strContent += "Perfect";
 								else
 								{
 									char szFloat[16];
 									memset( szFloat, 0, sizeof( char ) * 16 );
-									sprintf( szFloat, "%0.3f", pPeersT[leecher_iter].flShareRatio );
+									sprintf( szFloat, "%0.3f", pPeersT[leecher_iter]->flShareRatio );
 
 									pResponse->strContent += szFloat;
 								}
@@ -888,8 +893,8 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							{
 								pResponse->strContent += "<td class=\"number\">";
 
-								if( pPeersT[leecher_iter].iConnected > 0 )
-									pResponse->strContent += UTIL_BytesToString( pPeersT[leecher_iter].iUpped / pPeersT[leecher_iter].iConnected ) + "/sec";
+								if( pPeersT[leecher_iter]->iConnected > 0 )
+									pResponse->strContent += UTIL_BytesToString( pPeersT[leecher_iter]->iUpped / pPeersT[leecher_iter]->iConnected ) + "/sec";
 								else
 									pResponse->strContent += "N/A";
 
@@ -900,8 +905,8 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 							{
 								pResponse->strContent += "<td class=\"number\">";
 
-								if( pPeersT[leecher_iter].iConnected > 0 )
-									pResponse->strContent += UTIL_BytesToString( pPeersT[leecher_iter].iDowned / pPeersT[leecher_iter].iConnected ) + "/sec";
+								if( pPeersT[leecher_iter]->iConnected > 0 )
+									pResponse->strContent += UTIL_BytesToString( pPeersT[leecher_iter]->iDowned / pPeersT[leecher_iter]->iConnected ) + "/sec";
 								else
 									pResponse->strContent += "N/A";
 
@@ -922,6 +927,7 @@ void CTracker :: serverResponseStats( struct request_t *pRequest, struct respons
 						pResponse->strContent.insert( iCountGoesHere, strTemp );
 
 					delete [] pPeersT;
+					delete [] aPeersT;
 
 					if( bFound )
 						pResponse->strContent += "</table>\n";

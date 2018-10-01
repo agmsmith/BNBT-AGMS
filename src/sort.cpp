@@ -26,30 +26,30 @@
 
 int asortByName( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->strLowerName.compare( ( (const struct torrent_t *)elem2 )->strLowerName );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strLowerName.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strLowerName );
 }
 
 int asortByComplete( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->iSeeders - ( (const struct torrent_t *)elem2 )->iSeeders;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iSeeders - ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iSeeders;
 }
 
 int asortByDL( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->iLeechers - ( (const struct torrent_t *)elem2 )->iLeechers;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iLeechers - ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iLeechers;
 }
 
 int asortByAdded( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->strAdded.compare( ( (const struct torrent_t *)elem2 )->strAdded );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strAdded.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strAdded );
 }
 
 int asortBySize( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct torrent_t *tor1 = (const struct torrent_t *)elem1;
-	const struct torrent_t *tor2 = (const struct torrent_t *)elem2;
+	const struct torrent_t *tor1 = * (const struct torrent_t * *) const_cast<void *> (elem1);
+	const struct torrent_t *tor2 = * (const struct torrent_t * *) const_cast<void *> (elem2);
 
 	if( tor1->iSize < tor2->iSize )
 		return -1;
@@ -61,20 +61,20 @@ int asortBySize( const void *elem1, const void *elem2 )
 
 int asortByFiles( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->iFiles - ( (const struct torrent_t *)elem2 )->iFiles;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iFiles - ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iFiles;
 }
 
 int asortByComments( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->iComments - ( (const struct torrent_t *)elem2 )->iComments;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iComments - ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iComments;
 }
 
 int asortByAvgLeft( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct torrent_t *tor1 = (const struct torrent_t *)elem1;
-	const struct torrent_t *tor2 = (const struct torrent_t *)elem2;
+	const struct torrent_t *tor1 = * (const struct torrent_t * *) const_cast<void *> (elem1);
+	const struct torrent_t *tor2 = * (const struct torrent_t * *) const_cast<void *> (elem2);
 
 	if( tor1->iAverageLeft < tor2->iAverageLeft )
 		return -1;
@@ -86,20 +86,20 @@ int asortByAvgLeft( const void *elem1, const void *elem2 )
 
 int asortByAvgLeftPercent( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->iAverageLeftPercent - ( (const struct torrent_t *)elem2 )->iAverageLeftPercent;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iAverageLeftPercent - ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iAverageLeftPercent;
 }
 
 int asortByCompleted( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->iCompleted - ( (const struct torrent_t *)elem2 )->iCompleted;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iCompleted - ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iCompleted;
 }
 
 int asortByTransferred( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct torrent_t *tor1 = (const struct torrent_t *)elem1;
-	const struct torrent_t *tor2 = (const struct torrent_t *)elem2;
+	const struct torrent_t *tor1 = * (const struct torrent_t * *) const_cast<void *> (elem1);
+	const struct torrent_t *tor2 = * (const struct torrent_t * *) const_cast<void *> (elem2);
 
 	if( tor1->iTransferred < tor2->iTransferred )
 		return -1;
@@ -111,40 +111,40 @@ int asortByTransferred( const void *elem1, const void *elem2 )
 
 int asortByTag( const void *elem1, const void *elem2 ) /* =X= */
 {
-	return ( (const struct torrent_t *)elem1 )->strTag.compare( ( (const struct torrent_t *)elem2 )->strTag );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strTag.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strTag );
 }
 
 int asortByUploader( const void *elem1, const void *elem2 ) /* =X= */
 {
-	return ( (const struct torrent_t *)elem1 )->strUploader.compare( ( (const struct torrent_t *)elem2 )->strUploader );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strUploader.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strUploader );
 }
 
 int dsortByName( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->strLowerName.compare( ( (const struct torrent_t *)elem1 )->strLowerName );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strLowerName.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strLowerName );
 }
 
 int dsortByComplete( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->iSeeders - ( (const struct torrent_t *)elem1 )->iSeeders;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iSeeders - ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iSeeders;
 }
 
 int dsortByDL( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->iLeechers - ( (const struct torrent_t *)elem1 )->iLeechers;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iLeechers - ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iLeechers;
 }
 
 int dsortByAdded( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->strAdded.compare( ( (const struct torrent_t *)elem1 )->strAdded );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strAdded.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strAdded );
 }
 
 int dsortBySize( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct torrent_t *tor1 = (const struct torrent_t *)elem1;
-	const struct torrent_t *tor2 = (const struct torrent_t *)elem2;
+	const struct torrent_t *tor1 = * (const struct torrent_t * *) const_cast<void *> (elem1);
+	const struct torrent_t *tor2 = * (const struct torrent_t * *) const_cast<void *> (elem2);
 
 	if( tor1->iSize < tor2->iSize )
 		return 1;
@@ -156,20 +156,20 @@ int dsortBySize( const void *elem1, const void *elem2 )
 
 int dsortByFiles( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->iFiles - ( (const struct torrent_t *)elem1 )->iFiles;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iFiles - ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iFiles;
 }
 
 int dsortByComments( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->iComments - ( (const struct torrent_t *)elem1 )->iComments;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iComments - ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iComments;
 }
 
 int dsortByAvgLeft( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct torrent_t *tor1 = (const struct torrent_t *)elem1;
-	const struct torrent_t *tor2 = (const struct torrent_t *)elem2;
+	const struct torrent_t *tor1 = * (const struct torrent_t * *) const_cast<void *> (elem1);
+	const struct torrent_t *tor2 = * (const struct torrent_t * *) const_cast<void *> (elem2);
 
 	if( tor1->iAverageLeft < tor2->iAverageLeft )
 		return 1;
@@ -181,20 +181,20 @@ int dsortByAvgLeft( const void *elem1, const void *elem2 )
 
 int dsortByAvgLeftPercent( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->iAverageLeftPercent - ( (const struct torrent_t *)elem1 )->iAverageLeftPercent;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iAverageLeftPercent - ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iAverageLeftPercent;
 }
 
 int dsortByCompleted( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->iCompleted - ( (const struct torrent_t *)elem1 )->iCompleted;
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->iCompleted - ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->iCompleted;
 }
 
 int dsortByTransferred( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct torrent_t *tor1 = (const struct torrent_t *)elem1;
-	const struct torrent_t *tor2 = (const struct torrent_t *)elem2;
+	const struct torrent_t *tor1 = * (const struct torrent_t * *) const_cast<void *> (elem1);
+	const struct torrent_t *tor2 = * (const struct torrent_t * *) const_cast<void *> (elem2);
 
 	if( tor1->iTransferred < tor2->iTransferred )
 		return 1;
@@ -206,20 +206,20 @@ int dsortByTransferred( const void *elem1, const void *elem2 )
 
 int dsortByTag( const void *elem1, const void *elem2 ) /* =X= */
 {
-	return ( (const struct torrent_t *)elem2 )->strTag.compare( ( (const struct torrent_t *)elem1 )->strTag );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strTag.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strTag );
 }
 
 int dsortByUploader( const void *elem1, const void *elem2 ) /* =X= */
 {
-	return ( (const struct torrent_t *)elem2 )->strUploader.compare( ( (const struct torrent_t *)elem1 )->strUploader );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strUploader.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strUploader );
 }
 
 int asortpByUpped( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iUpped < peer2->iUpped )
 		return -1;
@@ -233,8 +233,8 @@ int asortpByDowned( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iDowned < peer2->iDowned )
 		return -1;
@@ -248,8 +248,8 @@ int asortpByLeft( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iLeft < peer2->iLeft )
 		return -1;
@@ -261,13 +261,13 @@ int asortpByLeft( const void *elem1, const void *elem2 )
 
 int asortpByConnected( const void *elem1, const void *elem2 )
 {
-	return (int) (( (const struct peer_t *)elem1 )->iConnected - ( (const struct peer_t *)elem2 )->iConnected);
+	return (int) (( * (const struct peer_t * *) const_cast<void *> (elem1) )->iConnected - ( * (const struct peer_t * *) const_cast<void *> (elem2) )->iConnected);
 }
 
 int asortpByShareRatio( const void *elem1, const void *elem2 )
 {
-	const float fl1 = ( (const struct peer_t *)elem1 )->flShareRatio;
-	const float fl2 = ( (const struct peer_t *)elem2 )->flShareRatio;
+	const float fl1 = ( * (const struct peer_t * *) const_cast<void *> (elem1) )->flShareRatio;
+	const float fl2 = ( * (const struct peer_t * *) const_cast<void *> (elem2) )->flShareRatio;
 
 	// this is complicated because -1 means infinite and casting to ints won't work
 
@@ -288,8 +288,8 @@ int dsortpByUpped( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iUpped < peer2->iUpped )
 		return 1;
@@ -303,8 +303,8 @@ int dsortpByDowned( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iDowned < peer2->iDowned )
 		return 1;
@@ -318,8 +318,8 @@ int dsortpByLeft( const void *elem1, const void *elem2 )
 {
 	// int64's will overflow, force a compare
 
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iLeft < peer2->iLeft )
 		return 1;
@@ -331,13 +331,13 @@ int dsortpByLeft( const void *elem1, const void *elem2 )
 
 int dsortpByConnected( const void *elem1, const void *elem2 )
 {
-	return (int) (( (const struct peer_t *)elem2 )->iConnected - ( (const struct peer_t *)elem1 )->iConnected);
+	return (int) (( * (const struct peer_t * *) const_cast<void *> (elem2) )->iConnected - ( * (const struct peer_t * *) const_cast<void *> (elem1) )->iConnected);
 }
 
 int dsortpByShareRatio( const void *elem1, const void *elem2 )
 {
-	const float fl1 = ( (const struct peer_t *)elem1 )->flShareRatio;
-	const float fl2 = ( (const struct peer_t *)elem2 )->flShareRatio;
+	const float fl1 = ( * (const struct peer_t * *) const_cast<void *> (elem1) )->flShareRatio;
+	const float fl2 = ( * (const struct peer_t * *) const_cast<void *> (elem2) )->flShareRatio;
 
 	// this is complicated because -1 means infinite and casting to ints won't work
 
@@ -351,78 +351,78 @@ int dsortpByShareRatio( const void *elem1, const void *elem2 )
 
 int asortuByLogin( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem1 )->strLowerLogin.compare( ( (const struct user_t *)elem2 )->strLowerLogin );
+	return ( * (const struct user_t * *) const_cast<void *> (elem1) )->strLowerLogin.compare( ( * (const struct user_t * *) const_cast<void *> (elem2) )->strLowerLogin );
 }
 
 int asortuByAccess( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem2 )->iAccess - ( (const struct user_t *)elem1 )->iAccess;
+	return ( * (const struct user_t * *) const_cast<void *> (elem2) )->iAccess - ( * (const struct user_t * *) const_cast<void *> (elem1) )->iAccess;
 }
 
 int asortuByMail( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem1 )->strLowerMail.compare( ( (const struct user_t *)elem2 )->strLowerMail );
+	return ( * (const struct user_t * *) const_cast<void *> (elem1) )->strLowerMail.compare( ( * (const struct user_t * *) const_cast<void *> (elem2) )->strLowerMail );
 }
 
 int asortuByCreated( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem1 )->strCreated.compare( ( (const struct user_t *)elem2 )->strCreated );
+	return ( * (const struct user_t * *) const_cast<void *> (elem1) )->strCreated.compare( ( * (const struct user_t * *) const_cast<void *> (elem2) )->strCreated );
 }
 
 int dsortuByLogin( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem2 )->strLowerLogin.compare( ( (const struct user_t *)elem1 )->strLowerLogin );
+	return ( * (const struct user_t * *) const_cast<void *> (elem2) )->strLowerLogin.compare( ( * (const struct user_t * *) const_cast<void *> (elem1) )->strLowerLogin );
 }
 
 int dsortuByAccess( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem1 )->iAccess - ( (const struct user_t *)elem2 )->iAccess;
+	return ( * (const struct user_t * *) const_cast<void *> (elem1) )->iAccess - ( * (const struct user_t * *) const_cast<void *> (elem2) )->iAccess;
 }
 
 int dsortuByMail( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem2 )->strLowerMail.compare( ( (const struct user_t *)elem1 )->strLowerMail );
+	return ( * (const struct user_t * *) const_cast<void *> (elem2) )->strLowerMail.compare( ( * (const struct user_t * *) const_cast<void *> (elem1) )->strLowerMail );
 }
 
 int dsortuByCreated( const void *elem1, const void *elem2 )
 {
-	return ( (const struct user_t *)elem2 )->strCreated.compare( ( (const struct user_t *)elem1 )->strCreated );
+	return ( * (const struct user_t * *) const_cast<void *> (elem2) )->strCreated.compare( ( * (const struct user_t * *) const_cast<void *> (elem1) )->strCreated );
 }
 
 int asortByIP( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem1 )->strIP.compare( ( (const struct torrent_t *)elem2 )->strIP );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strIP.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strIP );
 }
 
 int dsortByIP( const void *elem1, const void *elem2 )
 {
-	return ( (const struct torrent_t *)elem2 )->strIP.compare( ( (const struct torrent_t *)elem1 )->strIP );
+	return ( * (const struct torrent_t * *) const_cast<void *> (elem2) )->strIP.compare( ( * (const struct torrent_t * *) const_cast<void *> (elem1) )->strIP );
 }
 
 int asortpByClient( const void *elem1, const void *elem2 )
 {
-	return ( (const struct peer_t *)elem1 )->strClientType.compare( ( (const struct peer_t *)elem2 )->strClientType );
+	return ( * (const struct peer_t * *) const_cast<void *> (elem1) )->strClientType.compare( ( * (const struct peer_t * *) const_cast<void *> (elem2) )->strClientType );
 }
 
 int dsortpByClient( const void *elem1, const void *elem2 )
 {
-	return ( (const struct peer_t *)elem2 )->strClientType.compare( ( (const struct peer_t *)elem1 )->strClientType );
+	return ( * (const struct peer_t * *) const_cast<void *> (elem2) )->strClientType.compare( ( * (const struct peer_t * *) const_cast<void *> (elem1) )->strClientType );
 }
 
 int asortpByIP( const void *elem1, const void *elem2 )
 {
-	return ( (const struct peer_t *)elem1 )->strIP.compare( ( (const struct peer_t *)elem2 )->strIP );
+	return ( * (const struct peer_t * *) const_cast<void *> (elem1) )->strIP.compare( ( * (const struct peer_t * *) const_cast<void *> (elem2) )->strIP );
 }
 
 int dsortpByIP( const void *elem1, const void *elem2 )
 {
-	return ( (const struct peer_t *)elem2 )->strIP.compare( ( (const struct peer_t *)elem1 )->strIP );
+	return ( * (const struct peer_t * *) const_cast<void *> (elem2) )->strIP.compare( ( * (const struct peer_t * *) const_cast<void *> (elem1) )->strIP );
 }
 
 int asortpByAUR( const void *elem1, const void *elem2 )
 {
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iConnected !=0 && peer2->iConnected !=0 )
 	{
@@ -439,8 +439,8 @@ int asortpByAUR( const void *elem1, const void *elem2 )
 
 int dsortpByAUR( const void *elem1, const void *elem2 )
 {
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iConnected != 0 && peer2->iConnected != 0 )
 	{
@@ -457,8 +457,8 @@ int dsortpByAUR( const void *elem1, const void *elem2 )
 
 int asortpByADR( const void *elem1, const void *elem2 )
 {
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iConnected !=0 && peer2->iConnected !=0 )
 	{
@@ -475,8 +475,8 @@ int asortpByADR( const void *elem1, const void *elem2 )
 
 int dsortpByADR( const void *elem1, const void *elem2 )
 {
-	const struct peer_t *peer1 = (const struct peer_t *)elem1;
-	const struct peer_t *peer2 = (const struct peer_t *)elem2;
+	const struct peer_t *peer1 = * (const struct peer_t * *) const_cast<void *> (elem1);
+	const struct peer_t *peer2 = * (const struct peer_t * *) const_cast<void *> (elem2);
 
 	if( peer1->iConnected !=0 && peer2->iConnected !=0 )
 	{

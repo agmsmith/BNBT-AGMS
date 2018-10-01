@@ -272,26 +272,30 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 
 			// add the torrents into this structure one by one and sort it afterwards
 
-			struct torrent_t *pTorrents = new struct torrent_t[iKeySize];
+			struct torrent_t *aTorrents = new struct torrent_t[iKeySize];
+			struct torrent_t **pTorrents = new struct torrent_t * [iKeySize];
+			unsigned long int iTorrent;
+			for( iTorrent = 0; iTorrent < iKeySize; iTorrent++ )
+				pTorrents[iTorrent] = aTorrents + iTorrent;
 
 			unsigned long torrent_iter = 0;
 
 			for( map<string, CAtom *> :: iterator it = pmapDicti->begin( ); it != pmapDicti->end( ); it++ )
 			{
-				pTorrents[torrent_iter].strInfoHash = (*it).first;
-				pTorrents[torrent_iter].strName = "unknown";
-				pTorrents[torrent_iter].strLowerName = "unknown";
-				pTorrents[torrent_iter].iSeeders = 0;
-				pTorrents[torrent_iter].iLeechers = 0;
-				pTorrents[torrent_iter].iCompleted = 0;
-				pTorrents[torrent_iter].iTransferred = 0;
-				pTorrents[torrent_iter].iSize = 0;
-				pTorrents[torrent_iter].iFiles = 0;
-				pTorrents[torrent_iter].iComments = 0;
-				pTorrents[torrent_iter].iAverageLeft = 0;
-				pTorrents[torrent_iter].iAverageLeftPercent = 0;
-				pTorrents[torrent_iter].iMinLeft = 0;
-				pTorrents[torrent_iter].iMaxiLeft = 0;
+				pTorrents[torrent_iter]->strInfoHash = (*it).first;
+				pTorrents[torrent_iter]->strName = "unknown";
+				pTorrents[torrent_iter]->strLowerName = "unknown";
+				pTorrents[torrent_iter]->iSeeders = 0;
+				pTorrents[torrent_iter]->iLeechers = 0;
+				pTorrents[torrent_iter]->iCompleted = 0;
+				pTorrents[torrent_iter]->iTransferred = 0;
+				pTorrents[torrent_iter]->iSize = 0;
+				pTorrents[torrent_iter]->iFiles = 0;
+				pTorrents[torrent_iter]->iComments = 0;
+				pTorrents[torrent_iter]->iAverageLeft = 0;
+				pTorrents[torrent_iter]->iAverageLeftPercent = 0;
+				pTorrents[torrent_iter]->iMinLeft = 0;
+				pTorrents[torrent_iter]->iMaxiLeft = 0;
 
 				if( (*it).second->isDicti( ) )
 				{
@@ -299,7 +303,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 
 					if( m_pAllowed )
 					{
-						CAtom *pList = m_pAllowed->getItem( pTorrents[torrent_iter].strInfoHash );
+						CAtom *pList = m_pAllowed->getItem( pTorrents[torrent_iter]->strInfoHash );
 
 						if( pList && dynamic_cast<CAtomList *>( pList ) )
 						{
@@ -314,24 +318,24 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 								CAtom *pFiles = vecTorrent[4];
 
 								if( pFileName )
-									pTorrents[torrent_iter].strFileName = pFileName->toString( );
+									pTorrents[torrent_iter]->strFileName = pFileName->toString( );
 
 								if( pName )
 								{
 									// stick a lower case version in strNameLower for non case sensitive searching and sorting
 
-									pTorrents[torrent_iter].strName = pName->toString( );
-									pTorrents[torrent_iter].strLowerName = UTIL_ToLower( pTorrents[torrent_iter].strName );
+									pTorrents[torrent_iter]->strName = pName->toString( );
+									pTorrents[torrent_iter]->strLowerName = UTIL_ToLower( pTorrents[torrent_iter]->strName );
 								}
 
 								if( pAdded )
-									pTorrents[torrent_iter].strAdded = pAdded->toString( );
+									pTorrents[torrent_iter]->strAdded = pAdded->toString( );
 
 								if( pSize && dynamic_cast<CAtomLong *>( pSize ) )
-									pTorrents[torrent_iter].iSize = dynamic_cast<CAtomLong *>( pSize )->getValue( );
+									pTorrents[torrent_iter]->iSize = dynamic_cast<CAtomLong *>( pSize )->getValue( );
 
 								if( pFiles && dynamic_cast<CAtomInt *>( pFiles ) )
-									pTorrents[torrent_iter].iFiles = (unsigned int)dynamic_cast<CAtomInt *>( pFiles )->getValue( );
+									pTorrents[torrent_iter]->iFiles = (unsigned int)dynamic_cast<CAtomInt *>( pFiles )->getValue( );
 							}
 						}
 
@@ -339,10 +343,10 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							if( m_pComments )
 							{
-								CAtom *pCommentList = m_pComments->getItem( pTorrents[torrent_iter].strInfoHash );
+								CAtom *pCommentList = m_pComments->getItem( pTorrents[torrent_iter]->strInfoHash );
 
 								if( pCommentList && dynamic_cast<CAtomList *>( pCommentList ) )
-									pTorrents[torrent_iter].iComments = (unsigned int)dynamic_cast<CAtomList *>( pCommentList )->getValuePtr( )->size( );
+									pTorrents[torrent_iter]->iComments = (unsigned int)dynamic_cast<CAtomList *>( pCommentList )->getValuePtr( )->size( );
 							}
 						}
 					}
@@ -351,7 +355,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 
 					if( m_pTags )
 					{
-						CAtom *pDicti = m_pTags->getItem( pTorrents[torrent_iter].strInfoHash );
+						CAtom *pDicti = m_pTags->getItem( pTorrents[torrent_iter]->strInfoHash );
 
 						if( pDicti && pDicti->isDicti( ) )
 						{
@@ -361,21 +365,21 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 							CAtom *pInfoLink = ( (CAtomDicti *)pDicti )->getItem( "infolink" );
 
 							if( pTag )
-								pTorrents[torrent_iter].strTag = pTag->toString( );
+								pTorrents[torrent_iter]->strTag = pTag->toString( );
 
 							if( pName )
 							{
 								// this will overwrite the previous name, i.e. the filename
 
-								pTorrents[torrent_iter].strName = pName->toString( );
-								pTorrents[torrent_iter].strLowerName = UTIL_ToLower( pTorrents[torrent_iter].strName );
+								pTorrents[torrent_iter]->strName = pName->toString( );
+								pTorrents[torrent_iter]->strLowerName = UTIL_ToLower( pTorrents[torrent_iter]->strName );
 							}
 
 							if( pUploader )
-								pTorrents[torrent_iter].strUploader = pUploader->toString( );
+								pTorrents[torrent_iter]->strUploader = pUploader->toString( );
 
 							if( pInfoLink )
-								pTorrents[torrent_iter].strInfoLink = pInfoLink->toString( );
+								pTorrents[torrent_iter]->strInfoLink = pInfoLink->toString( );
 						}
 					}
 
@@ -394,24 +398,24 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 					{
 						vector<CAtom *> vecList = dynamic_cast<CAtomList *>( pFC )->getValue( );
 
-						pTorrents[torrent_iter].iSeeders = dynamic_cast<CAtomInt *>( vecList[0] )->getValue( );
-						pTorrents[torrent_iter].iLeechers = dynamic_cast<CAtomInt *>( vecList[1] )->getValue( );
-						pTorrents[torrent_iter].iCompleted = dynamic_cast<CAtomInt *>( vecList[2] )->getValue( );
+						pTorrents[torrent_iter]->iSeeders = dynamic_cast<CAtomInt *>( vecList[0] )->getValue( );
+						pTorrents[torrent_iter]->iLeechers = dynamic_cast<CAtomInt *>( vecList[1] )->getValue( );
+						pTorrents[torrent_iter]->iCompleted = dynamic_cast<CAtomInt *>( vecList[2] )->getValue( );
 
-						if( pTorrents[torrent_iter].iLeechers > 0 )
-							pTorrents[torrent_iter].iAverageLeft = dynamic_cast<CAtomLong *>( vecList[3] )->getValue( ) / pTorrents[torrent_iter].iLeechers;
+						if( pTorrents[torrent_iter]->iLeechers > 0 )
+							pTorrents[torrent_iter]->iAverageLeft = dynamic_cast<CAtomLong *>( vecList[3] )->getValue( ) / pTorrents[torrent_iter]->iLeechers;
 
-						pTorrents[torrent_iter].iMinLeft = dynamic_cast<CAtomLong *>( vecList[4] )->getValue( );
-						pTorrents[torrent_iter].iMaxiLeft = dynamic_cast<CAtomLong *>( vecList[5] )->getValue( );
+						pTorrents[torrent_iter]->iMinLeft = dynamic_cast<CAtomLong *>( vecList[4] )->getValue( );
+						pTorrents[torrent_iter]->iMaxiLeft = dynamic_cast<CAtomLong *>( vecList[5] )->getValue( );
 					}
 
 					// misc calculations
 
 					if( m_pAllowed && m_bShowTransferred )
-						pTorrents[torrent_iter].iTransferred = pTorrents[torrent_iter].iCompleted * pTorrents[torrent_iter].iSize;
+						pTorrents[torrent_iter]->iTransferred = pTorrents[torrent_iter]->iCompleted * pTorrents[torrent_iter]->iSize;
 
-					if( pTorrents[torrent_iter].iSize > 0 )
-						pTorrents[torrent_iter].iAverageLeftPercent = (unsigned int)( ( (double) pTorrents[torrent_iter].iAverageLeft / (double) pTorrents[torrent_iter].iSize ) * 100 );
+					if( pTorrents[torrent_iter]->iSize > 0 )
+						pTorrents[torrent_iter]->iAverageLeftPercent = (unsigned int)( ( (double) pTorrents[torrent_iter]->iAverageLeft / (double) pTorrents[torrent_iter]->iSize ) * 100 );
 				}
 
 				torrent_iter++;
@@ -428,31 +432,31 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 					if( iSort == SORT_ANAME )
 					{
 						if( m_pAllowed && m_bShowNames )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByName );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByName );
 					}
 					else if( iSort == SORT_ACOMPLETE )
-						qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByComplete );
+						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByComplete );
 					else if( iSort == SORT_AINCOMPLETE )
-						qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByDL );
+						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByDL );
 					else if( iSort == SORT_AADDED )
 					{
 						if( m_pAllowed && m_bShowAdded )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByAdded );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByAdded );
 					}
 					else if( iSort == SORT_ASIZE )
 					{
 						if( m_pAllowed && m_bShowSize )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortBySize );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortBySize );
 					}
 					else if( iSort == SORT_AFILES )
 					{
 						if( m_pAllowed && m_bShowNumFiles )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByFiles );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByFiles );
 					}
 					else if( iSort == SORT_ACOMMENTS )
 					{
 						if( m_pAllowed && m_bAllowComments )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByComments );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByComments );
 					}
 					else if( iSort == SORT_AAVGLEFT )
 					{
@@ -461,62 +465,62 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 							if( m_pAllowed )
 							{
 								if( m_bShowLeftAsProgress )
-									qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAvgLeftPercent );
+									qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAvgLeftPercent );
 								else
-									qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByAvgLeftPercent );
+									qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByAvgLeftPercent );
 							}
 							else
-								qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByAvgLeft );
+								qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByAvgLeft );
 						}
 					}
 					else if( iSort == SORT_ACOMPLETED )
 					{
 						if( m_bShowCompleted )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByCompleted );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByCompleted );
 					}
 					else if( iSort == SORT_ATRANSFERRED )
 					{
 						if( m_pAllowed && m_bShowTransferred )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByTransferred );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByTransferred );
 					}
 					else if( iSort == SORT_ATAG ) /* =X= */
 					{
 						if( !m_vecTags.empty( ) )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByTag );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByTag );
 					}
 					else if( iSort == SORT_AUPLOADER ) /* =X= */
 					{
 						if( m_bShowUploader )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByUploader );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByUploader );
 					}
 					else if( iSort == SORT_DNAME )
 					{
 						if( m_pAllowed && m_bShowNames )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByName );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByName );
 					}
 					else if( iSort == SORT_DCOMPLETE )
-						qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByComplete );
+						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByComplete );
 					else if( iSort == SORT_DINCOMPLETE )
-						qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByDL );
+						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByDL );
 					else if( iSort == SORT_DADDED )
 					{
 						if( m_pAllowed && m_bShowAdded )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAdded );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
 					}
 					else if( iSort == SORT_DSIZE )
 					{
 						if( m_pAllowed && m_bShowSize )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortBySize );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortBySize );
 					}
 					else if( iSort == SORT_DFILES )
 					{
 						if( m_pAllowed && m_bShowNumFiles )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByFiles );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByFiles );
 					}
 					else if( iSort == SORT_DCOMMENTS )
 					{
 						if( m_pAllowed && m_bAllowComments )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByComments );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByComments );
 					}
 					else if( iSort == SORT_DAVGLEFT )
 					{
@@ -525,40 +529,40 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 							if( m_pAllowed )
 							{
 								if( m_bShowLeftAsProgress )
-									qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), asortByAvgLeftPercent );
+									qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByAvgLeftPercent );
 								else
-									qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAvgLeftPercent );
+									qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAvgLeftPercent );
 							}
 							else
-								qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAvgLeft );
+								qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAvgLeft );
 						}
 					}
 					else if( iSort == SORT_DCOMPLETED )
 					{
 						if( m_bShowCompleted )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByCompleted );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByCompleted );
 					}
 					else if( iSort == SORT_DTRANSFERRED )
 					{
 						if( m_pAllowed && m_bShowTransferred )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByTransferred );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByTransferred );
 					}
 					else if( iSort == SORT_DTAG ) /* =X= */
 					{
 						if( !m_vecTags.empty( ) )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByTag );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByTag );
 					}
 					else if( iSort == SORT_DUPLOADER ) /* =X= */
 					{
 						if( m_bShowUploader )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByUploader );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByUploader );
 					}
 					else
 					{
 						// default action is to sort by added if we can
 
 						if( m_pAllowed && m_bShowAdded )
-							qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAdded );
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
 					}
 				}
 				else
@@ -566,7 +570,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 					// default action is to sort by added if we can
 
 					if( m_pAllowed && m_bShowAdded )
-						qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAdded );
+						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
 				}
 			}
 			else
@@ -574,7 +578,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 				// sort is disabled, but default action is to sort by added if we can
 
 				if( m_pAllowed && m_bShowAdded )
-					qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAdded );
+					qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
 			}
 
 			// some preliminary search crap
@@ -697,7 +701,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 				{
 					// only display entries that match the filter
 
-					if( pTorrents[i].strTag != strFilter )
+					if( pTorrents[i]->strTag != strFilter )
 						continue;
 				}
 
@@ -705,7 +709,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 				{
 					// only display entries that match the search
 
-					if( pTorrents[i].strLowerName.find( strLowerSearch ) == string :: npos )
+					if( pTorrents[i]->strLowerName.find( strLowerSearch ) == string :: npos )
 						continue;
 				}
 
@@ -1141,18 +1145,18 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 
 						if( !m_vecTags.empty( ) )
 						{
-							string strTemp = pTorrents[i].strTag;
+							string strTemp = pTorrents[i]->strTag;
 
 							for( vector< pair<string, string> > :: iterator it = m_vecTags.begin( ); it != m_vecTags.end( ); it++ )
 							{
-								if( (*it).first == pTorrents[i].strTag && !(*it).second.empty( ) )
-									pTorrents[i].strTag = "<img class=\"tag\" style=\"border:0\" alt=\"[" + pTorrents[i].strTag + "]\" src=\"" + (*it).second + "\">";
+								if( (*it).first == pTorrents[i]->strTag && !(*it).second.empty( ) )
+									pTorrents[i]->strTag = "<img class=\"tag\" style=\"border:0\" alt=\"[" + pTorrents[i]->strTag + "]\" src=\"" + (*it).second + "\">";
 							}
 
-							if( pTorrents[i].strTag == strTemp )
-								pTorrents[i].strTag = UTIL_RemoveHTML( pTorrents[i].strTag );
+							if( pTorrents[i]->strTag == strTemp )
+								pTorrents[i]->strTag = UTIL_RemoveHTML( pTorrents[i]->strTag );
 
-							pResponse->strContent += "<td class=\"tag\"><a title=\"" + strTemp + "\" href=\"/index.html?filter=" + UTIL_StringToEscaped( strTemp ) + "\">" + pTorrents[i].strTag + "</a></td>";
+							pResponse->strContent += "<td class=\"tag\"><a title=\"" + strTemp + "\" href=\"/index.html?filter=" + UTIL_StringToEscaped( strTemp ) + "\">" + pTorrents[i]->strTag + "</a></td>";
 						}
 
 						// <td> info hash
@@ -1162,9 +1166,9 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 							pResponse->strContent += "<td class=\"hash\">";
 
 							if( m_bShowStats )
-								pResponse->strContent += "<a class=\"stats\" href=\"/stats.html?info_hash=" + UTIL_HashToString( pTorrents[i].strInfoHash ) + "\">";
+								pResponse->strContent += "<a class=\"stats\" href=\"/stats.html?info_hash=" + UTIL_HashToString( pTorrents[i]->strInfoHash ) + "\">";
 
-							pResponse->strContent += UTIL_HashToString( pTorrents[i].strInfoHash );
+							pResponse->strContent += UTIL_HashToString( pTorrents[i]->strInfoHash );
 
 							if( m_bShowStats )
 								pResponse->strContent += "</a>";
@@ -1179,9 +1183,9 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 							pResponse->strContent += "<td class=\"name\">";
 
 							if( m_bShowStats )
-								pResponse->strContent += "<a class=\"stats\" href=\"/stats.html?info_hash=" + UTIL_HashToString( pTorrents[i].strInfoHash ) + "\">";
+								pResponse->strContent += "<a class=\"stats\" href=\"/stats.html?info_hash=" + UTIL_HashToString( pTorrents[i]->strInfoHash ) + "\">";
 
-							pResponse->strContent += UTIL_RemoveHTML( pTorrents[i].strName );
+							pResponse->strContent += UTIL_RemoveHTML( pTorrents[i]->strName );
 
 							if( m_bShowStats )
 								pResponse->strContent += "</a>";
@@ -1196,9 +1200,9 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 							pResponse->strContent += "<td class=\"download\"><a class=\"download\" href=\"";
 
 							if( m_strExternalTorrentDir.empty( ) )
-								pResponse->strContent += "/torrents/" + UTIL_HashToString( pTorrents[i].strInfoHash ) + ".torrent";
+								pResponse->strContent += "/torrents/" + UTIL_HashToString( pTorrents[i]->strInfoHash ) + ".torrent";
 							else
-								pResponse->strContent += m_strExternalTorrentDir + UTIL_StringToEscapedStrict( pTorrents[i].strFileName );
+								pResponse->strContent += m_strExternalTorrentDir + UTIL_StringToEscapedStrict( pTorrents[i]->strFileName );
 
 							pResponse->strContent += "\">DL</a></td>";
 						}
@@ -1208,7 +1212,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						if( m_pAllowed && m_bAllowComments )
 						{
 							if( m_pComments )
-								pResponse->strContent += "<td class=\"number\"><a href=\"/comments.html?info_hash=" + UTIL_HashToString( pTorrents[i].strInfoHash ) + "\">" + CAtomInt( pTorrents[i].iComments ).toString( ) + "</a></td>";
+								pResponse->strContent += "<td class=\"number\"><a href=\"/comments.html?info_hash=" + UTIL_HashToString( pTorrents[i]->strInfoHash ) + "\">" + CAtomInt( pTorrents[i]->iComments ).toString( ) + "</a></td>";
 						}
 
 						// <td> added
@@ -1217,11 +1221,11 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							pResponse->strContent += "<td class=\"date\">";
 
-							if( !pTorrents[i].strAdded.empty( ) )
+							if( !pTorrents[i]->strAdded.empty( ) )
 							{
 								// strip year and seconds from time
 
-								pResponse->strContent += pTorrents[i].strAdded.substr( 5, pTorrents[i].strAdded.size( ) - 8 );
+								pResponse->strContent += pTorrents[i]->strAdded.substr( 5, pTorrents[i]->strAdded.size( ) - 8 );
 							}
 
 							pResponse->strContent += "</td>";
@@ -1230,48 +1234,48 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						// <td> size
 
 						if( m_pAllowed && m_bShowSize )
-							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pTorrents[i].iSize ) + "</td>";
+							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pTorrents[i]->iSize ) + "</td>";
 
 						// <td> files
 
 						if( m_pAllowed && m_bShowNumFiles )
-							pResponse->strContent += "<td class=\"number\">" + CAtomInt( pTorrents[i].iFiles ).toString( ) + "</td>";
+							pResponse->strContent += "<td class=\"number\">" + CAtomInt( pTorrents[i]->iFiles ).toString( ) + "</td>";
 
 						// <td> seeders
 
 						pResponse->strContent += "<td class=\"number_";
 
-						if( pTorrents[i].iSeeders == 0 )
+						if( pTorrents[i]->iSeeders == 0 )
 							pResponse->strContent += "red\">";
-						else if( pTorrents[i].iSeeders < 5 )
+						else if( pTorrents[i]->iSeeders < 5 )
 							pResponse->strContent += "yellow\">";
 						else
 							pResponse->strContent += "green\">";
 
-						pResponse->strContent += CAtomInt( pTorrents[i].iSeeders ).toString( ) + "</td>";
+						pResponse->strContent += CAtomInt( pTorrents[i]->iSeeders ).toString( ) + "</td>";
 
 						// <td> leechers
 
 						pResponse->strContent += "<td class=\"number_";
 
-						if( pTorrents[i].iLeechers == 0 )
+						if( pTorrents[i]->iLeechers == 0 )
 							pResponse->strContent += "red\">";
-						else if( pTorrents[i].iLeechers < 5 )
+						else if( pTorrents[i]->iLeechers < 5 )
 							pResponse->strContent += "yellow\">";
 						else
 							pResponse->strContent += "green\">";
 
-						pResponse->strContent += CAtomInt( pTorrents[i].iLeechers ).toString( ) + "</td>";
+						pResponse->strContent += CAtomInt( pTorrents[i]->iLeechers ).toString( ) + "</td>";
 
 						// <td> completed
 
 						if( m_bShowCompleted )
-							pResponse->strContent += "<td class=\"number\">" + CAtomInt( pTorrents[i].iCompleted ).toString( ) + "</td>";
+							pResponse->strContent += "<td class=\"number\">" + CAtomInt( pTorrents[i]->iCompleted ).toString( ) + "</td>";
 
 						// <td> transferred
 
 						if( m_pAllowed && m_bShowTransferred )
-							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pTorrents[i].iTransferred ) + "</td>";
+							pResponse->strContent += "<td class=\"bytes\">" + UTIL_BytesToString( pTorrents[i]->iTransferred ) + "</td>";
 
 						// <td> min left
 
@@ -1279,7 +1283,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							pResponse->strContent += "<td class=\"percent\">";
 
-							if( pTorrents[i].iLeechers == 0 )
+							if( pTorrents[i]->iLeechers == 0 )
 								pResponse->strContent += "N/A";
 							else
 							{
@@ -1287,18 +1291,18 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 								{
 									int iPercent = 0;
 
-									if( pTorrents[i].iSize > 0 )
+									if( pTorrents[i]->iSize > 0 )
 									{
 										if( m_bShowLeftAsProgress )
-											iPercent = 100 - (int)( ( (double) pTorrents[i].iMaxiLeft / (double) pTorrents[i].iSize ) * 100 );
+											iPercent = 100 - (int)( ( (double) pTorrents[i]->iMaxiLeft / (double) pTorrents[i]->iSize ) * 100 );
 										else
-											iPercent = (int)( ( (double) pTorrents[i].iMinLeft / (double) pTorrents[i].iSize ) * 100 );
+											iPercent = (int)( ( (double) pTorrents[i]->iMinLeft / (double) pTorrents[i]->iSize ) * 100 );
 									}
 
 									pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%</td>";
 								}
 								else
-									pResponse->strContent += UTIL_BytesToString( pTorrents[i].iMinLeft );
+									pResponse->strContent += UTIL_BytesToString( pTorrents[i]->iMinLeft );
 							}
 						}
 
@@ -1308,7 +1312,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							pResponse->strContent += "<td class=\"percent\" style=\"white-space:nowrap\">";
 
-							if( pTorrents[i].iLeechers == 0 )
+							if( pTorrents[i]->iLeechers == 0 )
 								pResponse->strContent += "N/A";
 							else
 							{
@@ -1317,9 +1321,9 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 									int iPercent;
 
 									if( m_bShowLeftAsProgress )
-										iPercent = 100 - pTorrents[i].iAverageLeftPercent;
+										iPercent = 100 - pTorrents[i]->iAverageLeftPercent;
 									else
-										iPercent = pTorrents[i].iAverageLeftPercent;
+										iPercent = pTorrents[i]->iAverageLeftPercent;
 
 									pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%";
 
@@ -1335,7 +1339,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 									}
 								}
 								else
-									pResponse->strContent += UTIL_BytesToString( pTorrents[i].iAverageLeft );
+									pResponse->strContent += UTIL_BytesToString( pTorrents[i]->iAverageLeft );
 
 								pResponse->strContent += "</td>";
 							}
@@ -1347,7 +1351,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							pResponse->strContent += "<td class=\"percent\">";
 
-							if( pTorrents[i].iLeechers == 0 )
+							if( pTorrents[i]->iLeechers == 0 )
 								pResponse->strContent += "N/A";
 							else
 							{
@@ -1355,25 +1359,25 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 								{
 									int iPercent = 0;
 
-									if( pTorrents[i].iSize > 0 )
+									if( pTorrents[i]->iSize > 0 )
 									{
 										if( m_bShowLeftAsProgress )
-											iPercent = 100 - (int)( ( (double) pTorrents[i].iMinLeft / (double) pTorrents[i].iSize ) * 100 );
+											iPercent = 100 - (int)( ( (double) pTorrents[i]->iMinLeft / (double) pTorrents[i]->iSize ) * 100 );
 										else
-											iPercent = (int)( ( (double) pTorrents[i].iMaxiLeft / (double) pTorrents[i].iSize ) * 100 );
+											iPercent = (int)( ( (double) pTorrents[i]->iMaxiLeft / (double) pTorrents[i]->iSize ) * 100 );
 									}
 
 									pResponse->strContent += CAtomInt( iPercent ).toString( ) + "%</td>";
 								}
 								else
-									pResponse->strContent += UTIL_BytesToString( pTorrents[i].iMaxiLeft );
+									pResponse->strContent += UTIL_BytesToString( pTorrents[i]->iMaxiLeft );
 							}
 						}
 
 						// <td> uploader
 
 						if( m_bShowUploader )
-							pResponse->strContent += "<td class=\"name\">" + UTIL_RemoveHTML( pTorrents[i].strUploader ) + "</td>";
+							pResponse->strContent += "<td class=\"name\">" + UTIL_RemoveHTML( pTorrents[i]->strUploader ) + "</td>";
 
 						// <td> info link
 
@@ -1381,8 +1385,8 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						{
 							pResponse->strContent += "<td class=\"infolink\">";
 
-							if( !pTorrents[i].strInfoLink.empty( ) )
-								pResponse->strContent += "<a href=\"" + UTIL_RemoveHTML( pTorrents[i].strInfoLink ) + "\">Link</a>";
+							if( !pTorrents[i]->strInfoLink.empty( ) )
+								pResponse->strContent += "<a href=\"" + UTIL_RemoveHTML( pTorrents[i]->strInfoLink ) + "\">Link</a>";
 
 							pResponse->strContent += "</td>";
 						}
@@ -1392,7 +1396,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 						if( pRequest->user.iAccess & ACCESS_EDIT )
 						{
 							if( m_pAllowed )
-								pResponse->strContent += "<td>[<a href=\"/index.html?del=" + UTIL_HashToString( pTorrents[i].strInfoHash ) + "\">Delete</a>]</td>";
+								pResponse->strContent += "<td>[<a href=\"/index.html?del=" + UTIL_HashToString( pTorrents[i]->strInfoHash ) + "\">Delete</a>]</td>";
 						}
 
 						pResponse->strContent += "</tr>\n";
@@ -1405,6 +1409,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 			}
 
 			delete [] pTorrents;
+			delete [] aTorrents;
 
 			// some finishing touches
 

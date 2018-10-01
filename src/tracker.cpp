@@ -774,28 +774,36 @@ void CTracker :: saveRSS( string strChannelTag )
 
 		unsigned long iKeySize = (unsigned long)pmapDicti->size( );
 
-		// add the torrents into this structure one by one and sort it afterwards
+		// Add the torrents into this structure one by one and sort it
+		// afterwards.  Because the torrent_t structure includes modern
+		// (circa 2018) STL strings, it can no longer be copied with a
+		// memcpy, so we have a second array of pointers to elements in
+		// the array and sort that.  AGMS20180929
 
-		struct torrent_t *pTorrents = new struct torrent_t[iKeySize];
+		struct torrent_t *aTorrents = new struct torrent_t[iKeySize];
+		struct torrent_t **pTorrents = new struct torrent_t * [iKeySize];
+		unsigned long int iTorrent;
+		for( iTorrent = 0; iTorrent < iKeySize; iTorrent++ )
+			pTorrents[iTorrent] = aTorrents + iTorrent;
 
 		unsigned long torrent_iter = 0;
 
 		for( map<string, CAtom *> :: iterator it = pmapDicti->begin( ); it != pmapDicti->end( ); it++ )
 		{
-			pTorrents[torrent_iter].strInfoHash = UTIL_HashToString( (*it).first );
-			pTorrents[torrent_iter].strName = "unknown";
-			pTorrents[torrent_iter].strLowerName = "unknown";
-			pTorrents[torrent_iter].iSeeders = 0;
-			pTorrents[torrent_iter].iLeechers = 0;
-			pTorrents[torrent_iter].iCompleted = 0;
-			pTorrents[torrent_iter].iTransferred = 0;
-			pTorrents[torrent_iter].iSize = 0;
-			pTorrents[torrent_iter].iFiles = 0;
-			pTorrents[torrent_iter].iComments = 0;
-			pTorrents[torrent_iter].iAverageLeft = 0;
-			pTorrents[torrent_iter].iAverageLeftPercent = 0;
-			pTorrents[torrent_iter].iMinLeft = 0;
-			pTorrents[torrent_iter].iMaxiLeft = 0;
+			pTorrents[torrent_iter]->strInfoHash = UTIL_HashToString( (*it).first );
+			pTorrents[torrent_iter]->strName = "unknown";
+			pTorrents[torrent_iter]->strLowerName = "unknown";
+			pTorrents[torrent_iter]->iSeeders = 0;
+			pTorrents[torrent_iter]->iLeechers = 0;
+			pTorrents[torrent_iter]->iCompleted = 0;
+			pTorrents[torrent_iter]->iTransferred = 0;
+			pTorrents[torrent_iter]->iSize = 0;
+			pTorrents[torrent_iter]->iFiles = 0;
+			pTorrents[torrent_iter]->iComments = 0;
+			pTorrents[torrent_iter]->iAverageLeft = 0;
+			pTorrents[torrent_iter]->iAverageLeftPercent = 0;
+			pTorrents[torrent_iter]->iMinLeft = 0;
+			pTorrents[torrent_iter]->iMaxiLeft = 0;
 
 			if( m_pAllowed )
 			{
@@ -814,19 +822,19 @@ void CTracker :: saveRSS( string strChannelTag )
 						CAtom *pFiles = vecTorrent[4];
 
 						if( pFileName )
-							pTorrents[torrent_iter].strFileName = UTIL_RemoveHTML( pFileName->toString( ) );
+							pTorrents[torrent_iter]->strFileName = UTIL_RemoveHTML( pFileName->toString( ) );
 
 						if( pName )
-							pTorrents[torrent_iter].strName = UTIL_RemoveHTML( pName->toString( ) );
+							pTorrents[torrent_iter]->strName = UTIL_RemoveHTML( pName->toString( ) );
 
 						if( pAdded )
-							pTorrents[torrent_iter].strAdded = pAdded->toString( );
+							pTorrents[torrent_iter]->strAdded = pAdded->toString( );
 
 						if( pSize )
-							pTorrents[torrent_iter].iSize = dynamic_cast<CAtomLong *>( pSize )->getValue( );
+							pTorrents[torrent_iter]->iSize = dynamic_cast<CAtomLong *>( pSize )->getValue( );
 						
 						if( pFiles )
-							pTorrents[torrent_iter].iFiles = (unsigned int)dynamic_cast<CAtomInt *>( pFiles )->getValue( );
+							pTorrents[torrent_iter]->iFiles = (unsigned int)dynamic_cast<CAtomInt *>( pFiles )->getValue( );
 					}
 				}
 			}
@@ -843,23 +851,23 @@ void CTracker :: saveRSS( string strChannelTag )
 					CAtom *pInfoLink = ( (CAtomDicti *)pDicti )->getItem( "infolink" );
 
 					if( pTag )
-						pTorrents[torrent_iter].strTag = UTIL_RemoveHTML( pTag->toString( ) );
+						pTorrents[torrent_iter]->strTag = UTIL_RemoveHTML( pTag->toString( ) );
 
 					if( pName )
-						pTorrents[torrent_iter].strName = UTIL_RemoveHTML( pName->toString( ) );
+						pTorrents[torrent_iter]->strName = UTIL_RemoveHTML( pName->toString( ) );
 
 					if( pUploader )
-						pTorrents[torrent_iter].strUploader = UTIL_RemoveHTML( pUploader->toString( ) );
+						pTorrents[torrent_iter]->strUploader = UTIL_RemoveHTML( pUploader->toString( ) );
 
 					if( pInfoLink )
-						pTorrents[torrent_iter].strInfoLink = pInfoLink->toString( );
+						pTorrents[torrent_iter]->strInfoLink = pInfoLink->toString( );
 				}
 			}
 
 			torrent_iter++;
 		}
 
-		qsort( pTorrents, iKeySize, sizeof( struct torrent_t ), dsortByAdded );
+		qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
 
 		unsigned long intLimit;
 
@@ -870,58 +878,59 @@ void CTracker :: saveRSS( string strChannelTag )
 
 		for( unsigned long i = 0; i < intLimit; i++ )
 		{
-			if( strChannelTag.empty( ) || strChannelTag == pTorrents[i].strTag )
+			if( strChannelTag.empty( ) || strChannelTag == pTorrents[i]->strTag )
 			{
 				string strTorrentLink;
 
 				if( m_strExternalTorrentDir.empty( ) )
-					strTorrentLink = m_strTrackerURL + "torrents/" + pTorrents[i].strInfoHash + ".torrent";
+					strTorrentLink = m_strTrackerURL + "torrents/" + pTorrents[i]->strInfoHash + ".torrent";
 				else
-					strTorrentLink = m_strExternalTorrentDir + UTIL_StringToEscapedStrict( pTorrents[i].strFileName );
+					strTorrentLink = m_strExternalTorrentDir + UTIL_StringToEscapedStrict( pTorrents[i]->strFileName );
 
-				int iFileSize = (int) UTIL_SizeFile( string( m_strAllowedDir + pTorrents[i].strFileName ).c_str( ) );
+				int iFileSize = (int) UTIL_SizeFile( string( m_strAllowedDir + pTorrents[i]->strFileName ).c_str( ) );
 
 				string strInfoLink;
 
-				if( !pTorrents[i].strInfoLink.empty( ) )
-					strInfoLink = "<br/>\nInfo: <a href=\"" + pTorrents[i].strInfoLink + "\">" + pTorrents[i].strInfoLink + "</a>";
+				if( !pTorrents[i]->strInfoLink.empty( ) )
+					strInfoLink = "<br/>\nInfo: <a href=\"" + pTorrents[i]->strInfoLink + "\">" + pTorrents[i]->strInfoLink + "</a>";
 
 				strData += "<item>\n";
-				strData += "<title>" + pTorrents[i].strName + "</title>\n";
+				strData += "<title>" + pTorrents[i]->strName + "</title>\n";
 				strData += "<link>" + strTorrentLink + "</link>\n";
 
 				// description
 
 				strData += "<description>";
-				strData += "<![CDATA[Name: " + pTorrents[i].strName + "<br/>\n";
-				strData += "Info_hash: " + pTorrents[i].strInfoHash + "<br/>\n";
+				strData += "<![CDATA[Name: " + pTorrents[i]->strName + "<br/>\n";
+				strData += "Info_hash: " + pTorrents[i]->strInfoHash + "<br/>\n";
 				strData += "Torrent: <a href=\"" + strTorrentLink + "\">" + strTorrentLink + "</a>";
 
-				if( m_bShowUploader && !pTorrents[i].strUploader.empty( ) )
-					strData += "<br/>\nUploader: " + pTorrents[i].strUploader;
+				if( m_bShowUploader && !pTorrents[i]->strUploader.empty( ) )
+					strData += "<br/>\nUploader: " + pTorrents[i]->strUploader;
 
-				if( !pTorrents[i].strTag.empty( ) )
-					strData += "<br/>\nTag: " + pTorrents[i].strTag;
+				if( !pTorrents[i]->strTag.empty( ) )
+					strData += "<br/>\nTag: " + pTorrents[i]->strTag;
 
-				strData += "<br/>\nSize: " + UTIL_BytesToString( pTorrents[i].iSize );
-				strData += "<br/>\nFiles: " + CAtomInt( pTorrents[i].iFiles ).toString( );
+				strData += "<br/>\nSize: " + UTIL_BytesToString( pTorrents[i]->iSize );
+				strData += "<br/>\nFiles: " + CAtomInt( pTorrents[i]->iFiles ).toString( );
 				strData += strInfoLink + "]]>";
 				strData += "</description>\n";
 
 				if( m_bAllowComments )
-					strData += "<comments>" + m_strTrackerURL + "comments.html?info_hash=" + pTorrents[i].strInfoHash + "</comments>\n";
+					strData += "<comments>" + m_strTrackerURL + "comments.html?info_hash=" + pTorrents[i]->strInfoHash + "</comments>\n";
 
-				if( !pTorrents[i].strTag.empty( ) )
-					strData += "<category domain=\"" + m_strTrackerURL + "index.html?filter=" + UTIL_StringToEscaped( pTorrents[i].strTag ) + "\">" + pTorrents[i].strTag + "</category>\n";
+				if( !pTorrents[i]->strTag.empty( ) )
+					strData += "<category domain=\"" + m_strTrackerURL + "index.html?filter=" + UTIL_StringToEscaped( pTorrents[i]->strTag ) + "\">" + pTorrents[i]->strTag + "</category>\n";
 
 				strData += "<enclosure url=\"" + strTorrentLink + "\" type=\"application/x-bittorrent\" length=\"" + CAtomInt( iFileSize ).toString( ) + "\" />\n";
-				strData += "<guid isPermaLink=\"true\">" + m_strTrackerURL + "stats.html?info_hash=" + pTorrents[i].strInfoHash + "</guid>\n";
-				strData += "<pubDate>" + UTIL_AddedToDate( pTorrents[i].strAdded ) + "</pubDate>\n";
+				strData += "<guid isPermaLink=\"true\">" + m_strTrackerURL + "stats.html?info_hash=" + pTorrents[i]->strInfoHash + "</guid>\n";
+				strData += "<pubDate>" + UTIL_AddedToDate( pTorrents[i]->strAdded ) + "</pubDate>\n";
 				strData += "</item>\n";
 			}
 		}
 
 		delete [] pTorrents;
+		delete [] aTorrents;
 	}
 
 	strData += "</channel>\n";

@@ -7,7 +7,7 @@ I've started with the code from BNBT 8.5 as of July 2006, as found on https://so
 
 I'm trying to get the basic BNBT to compile under Fedora 28 Linux, a circa 2018 version of the GNU/Linux operating system.  There's an option for a MySQL database version of BNBT, which I'm ignoring, so that likely won't build.
 
-- AGMS20180930
+\- AGMS20180930
 
 
 # BNBT Beta 8.1 (a C++ BitTorrent tracker)
