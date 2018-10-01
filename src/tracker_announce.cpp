@@ -304,7 +304,7 @@ void CTracker :: serverResponseAnnounce( struct request_t *pRequest, struct resp
 
 						bool bOK = true;
 						char pCompact[6];
-						char szIP[16];
+						char szIP[18]; // Two extra to avoid a compiler warning for strncpy.
 						char *szCur = szIP;
 						char *pSplit;
 						strncpy( szIP, pIP->toString( ).c_str( ), 16 );
