@@ -89,12 +89,6 @@ void CTracker :: serverResponseInfo( struct request_t *pRequest, struct response
 	pResponse->strContent += "</head>\n";
 	pResponse->strContent += "<body>\n\n";
 
-	/* =X= */
-	// Display a message if javascript not supported by browser
-	pResponse->strContent += "<noscript>\n";    
-	pResponse->strContent += "<p class=\"js_warning\">Please enable JavaScript support or upgrade your browser.</p>\n";   
-	pResponse->strContent += "</noscript>\n\n"; 
-
 	if( pRequest->user.strLogin.empty( ) )
 		pResponse->strContent += "<p class=\"login1_info\">You are not logged in. Click <a href=\"/login.html\">here</a> to login.</p>\n";
 	else

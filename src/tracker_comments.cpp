@@ -94,12 +94,6 @@ void CTracker :: serverResponseComments( struct request_t *pRequest, struct resp
 	pResponse->strContent += "</head>\n";
 	pResponse->strContent += "<body>\n\n";
 
-	/* =X= */
-	// Display a message if javascript not supported by browser
-	pResponse->strContent += "<noscript>\n";    
-	pResponse->strContent += "<p class=\"js_warning\">Please enable JavaScript support or upgrade your browser.</p>\n";   
-	pResponse->strContent += "</noscript>\n\n"; 
-
 	// assorted scripts (thanks SA)
 
 	pResponse->strContent += "<script language=\"javascript\">\n";

@@ -99,12 +99,6 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 	pResponse->strContent += "<body>\n\n";
 
 	/* =X= */
-	// Display a message if javascript not supported by browser
-	pResponse->strContent += "<noscript>\n";    
-	pResponse->strContent += "<p class=\"js_warning\">Please enable JavaScript support or upgrade your browser.</p>\n";   
-	pResponse->strContent += "</noscript>\n\n"; 
-
-	/* =X= */
 	// For internalised mouseover feature
 	if( m_bUseMouseovers && ( pRequest->user.iAccess & ACCESS_VIEW ) )
 	{
