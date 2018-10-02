@@ -867,7 +867,7 @@ void CTracker :: saveRSS( string strChannelTag )
 			torrent_iter++;
 		}
 
-		qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
+		qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByName );
 
 		unsigned long intLimit;
 

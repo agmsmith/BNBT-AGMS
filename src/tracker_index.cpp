@@ -559,26 +559,26 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 					}
 					else
 					{
-						// default action is to sort by added if we can
+						// default action for an unknown sort type is to sort by name if we can
 
-						if( m_pAllowed && m_bShowAdded )
-							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
+						if( m_pAllowed )
+							qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByName );
 					}
 				}
 				else
 				{
-					// default action is to sort by added if we can
+					// default action for an empty sort type is to sort by name if we can
 
-					if( m_pAllowed && m_bShowAdded )
-						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
+					if( m_pAllowed )
+						qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByName );
 				}
 			}
 			else
 			{
-				// sort is disabled, but default action is to sort by added if we can
+				// sort is disabled, but default action is to sort by name if we can
 
-				if( m_pAllowed && m_bShowAdded )
-					qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), dsortByAdded );
+				if( m_pAllowed )
+					qsort( pTorrents, iKeySize, sizeof( pTorrents[0] ), asortByName );
 			}
 
 			// some preliminary search crap
