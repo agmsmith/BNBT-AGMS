@@ -825,7 +825,12 @@ void CTracker :: saveRSS( string strChannelTag )
 							pTorrents[torrent_iter]->strFileName = UTIL_RemoveHTML( pFileName->toString( ) );
 
 						if( pName )
+						{
 							pTorrents[torrent_iter]->strName = UTIL_RemoveHTML( pName->toString( ) );
+
+							// stick a lower case version in strNameLower for non case sensitive searching and sorting
+							pTorrents[torrent_iter]->strLowerName = UTIL_ToLower( pTorrents[torrent_iter]->strName );
+						}
 
 						if( pAdded )
 							pTorrents[torrent_iter]->strAdded = pAdded->toString( );
@@ -854,7 +859,10 @@ void CTracker :: saveRSS( string strChannelTag )
 						pTorrents[torrent_iter]->strTag = UTIL_RemoveHTML( pTag->toString( ) );
 
 					if( pName )
+					{
 						pTorrents[torrent_iter]->strName = UTIL_RemoveHTML( pName->toString( ) );
+						pTorrents[torrent_iter]->strLowerName = UTIL_ToLower( pTorrents[torrent_iter]->strName );
+					}
 
 					if( pUploader )
 						pTorrents[torrent_iter]->strUploader = UTIL_RemoveHTML( pUploader->toString( ) );
