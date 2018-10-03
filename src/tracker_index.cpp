@@ -1473,7 +1473,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 
 		// don't even think about removing this :)
 
-		pResponse->strContent += "<p style=\"text-align:center\">POWERED BY BNBT " + string( BNBT_VER ) + "</p>\n";
+		pResponse->strContent += "<p style=\"text-align:center\">POWERED BY BNBT " + string( BNBT_VER ) + ", compiled on " __DATE__ ".</p>\n";
 
 		/* =X= */
 		// For internalised mouseover feature

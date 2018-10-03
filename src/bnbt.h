@@ -228,7 +228,7 @@ struct request_t
 
 // current version
 
-#define BNBT_VER "Beta 8.5 CVS (Unstable)"
+#define BNBT_VER "Beta 8.5 - AGMS"
 
 #ifdef WIN32
  #define BNBT_SERVICE_NAME "BNBT Service"
