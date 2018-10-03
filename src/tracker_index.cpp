@@ -41,7 +41,7 @@ void CTracker :: serverResponseIndex( struct request_t *pRequest, struct respons
 	pResponse->strContent += "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n"; /* =X= */
 	pResponse->strContent += "<html lang=\"en\">\n";
 	pResponse->strContent += "<head>\n";
-	pResponse->strContent += "<title>BNBT Tracker Info</title>\n";
+	pResponse->strContent += "<title>" + gstrRealm + "</title>\n";
 
 	if( !gstrStyle.empty( ) )
 		pResponse->strContent += "<link rel=\"stylesheet\" title=\"external\" type=\"" + gmapMime[".css"] + "\" href=\"" + gstrStyle + "\">\n"; /* =X= */
