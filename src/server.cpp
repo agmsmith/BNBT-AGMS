@@ -281,7 +281,7 @@ bool CServer :: AddListener( struct sockaddr_in sin )
 
 	// listen
 
-	if( listen( sckListener, 1 ) == SOCKET_ERROR )
+	if( listen( sckListener, 16 /* pending connections queue size */ ) == SOCKET_ERROR )
 	{
 		UTIL_LogPrint( "server warning - unable to listen (error %s)\n", GetLastErrorString( ) );
 
